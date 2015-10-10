@@ -1,4 +1,4 @@
-source 'http://ruby.taobao.org'
+source 'https://ruby.taobao.org'
 
 gem 'rails', '3.2.11'
 
@@ -50,12 +50,6 @@ gem 'execjs'
 gem 'therubyracer'
 
 gem 'axlsx'
-
-#gem 'weixin_rails_middleware', git: "git://github.com/lanrion/weixin_rails_middleware.git", branch: "master"
-gem 'weixin_rails_middleware'
-
-gem 'weixin_authorize'
-gem "redis-namespace"
 
 gem 'rest-client'
 gem 'httpclient'
