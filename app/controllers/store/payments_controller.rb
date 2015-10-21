@@ -30,14 +30,12 @@ class Store::PaymentsController < ApplicationController
 			payment.pay_ver = '1.0'
 			payment.paycost = 0
 
-			payment.account = 'baohengboi | 保亨生物'
+			payment.account = 'baohengboi | 佐康自然生态食品'
 			payment.member_id = payment.op_id = @user.member_id
 			payment.pay_account = @user.login_name
 			payment.ip = request.remote_ip
 
 			payment.t_begin = payment.t_confirm = Time.now.to_i
-
-			payment.memo = nil  if pay_app_id == 'bcom'
 			
 			payment.pay_bill = Ecstore::Bill.new do |bill|
 				bill.rel_id  = rel_id
@@ -79,7 +77,7 @@ class Store::PaymentsController < ApplicationController
 				pay.pay_id = @payment.payment_id
 				pay.pay_amount = @payment.cur_money.to_f
 				pay.pay_time = Time.now
-				pay.subject = "保亨生物订单(#{order_id})"
+				pay.subject = "佐康自然生态食品订单(#{order_id})"
 				pay.installment = @payment.pay_bill.order.installment if @payment.pay_bill.order
 		        pay.openid = @user.account.login_name
 		        pay.spbill_create_ip = request.remote_ip
@@ -111,7 +109,7 @@ class Store::PaymentsController < ApplicationController
 	def callback
 		ModecPay.logger.info "[#{Time.now}][#{request.remote_ip}] #{request.request_method} \"#{request.fullpath}\""
 
-		@payment = Ecstore::Payment.find(params.delete(:id))
+		@payment = Ecstore::Payment.find(params.delete(:payment_id))
 		return redirect_to detail_order_path(@payment.pay_bill.order) if @payment&&@payment.paid?
 		
 		adapter  = params.delete(:adapter)
@@ -144,8 +142,7 @@ class Store::PaymentsController < ApplicationController
 			response =  result
 		end
 		
-		#redirect_to detail_order_path(@payment.pay_bill.order)
-    redirect_to  "/orders/norsh_show_order?id=#{@payment.pay_bill.order.order_id}"
+		redirect_to detail_order_path(@payment.pay_bill.order)
 	end
 
 	def test_notify

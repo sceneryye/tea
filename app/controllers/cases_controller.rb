@@ -5,7 +5,7 @@ class CasesController < ApplicationController
 	layout 'standard'
 
 	def index
-		@title = "糖友案例分享-佐康茶"
+		@title = "糖友案例分享-佐康原生态食品茶"
 		@cases = Imodec::MembersCase.all#.order("updated_at DESC")
 	end
 

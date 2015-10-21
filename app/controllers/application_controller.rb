@@ -49,20 +49,21 @@ class ApplicationController < ActionController::Base
     end
 
     def find_cart!
-            if signed_in?
-              @line_items = Ecstore::Cart.where(:member_id=>current_account.account_id)
+        
+        discount = 1
+        if signed_in?
+          @line_items = Ecstore::Cart.where(:member_id=>current_account.account_id)
+          discount = current_account.user.member_lv.dis_count if current_account.user.member_lv_id
 
-            else
-              member_ident = @m_id
-              @line_items = Ecstore::Cart.where(:member_ident=>member_ident)
-            end
-            @cart_total_quantity = @line_items.inject(0){ |t,l| t+=l.quantity }.to_i || 0
-            if cookies[:MLV] == "10"
-              @cart_total =@line_items.select{|x| x.product.present? }.collect{ |x| (x.product.bulk*x.quantity) }.inject(:+) || 0
-            else
-              @cart_total = @line_items.select{|x| x.product.present? }.collect{ |x| (x.product.price*x.quantity) }.inject(:+) || 0
-            end
-           #@pmtable = @line_items.select { |line_item| line_item.good.is_suit? }.size == 0
+        else
+          member_ident = @m_id
+          @line_items = Ecstore::Cart.where(:member_ident=>member_ident)
+        end
+        @cart_total_quantity = @line_items.inject(0){ |t,l| t+=l.quantity }.to_i || 0
+       
+        @cart_total = @line_items.select{|x| x.product.present? }.collect{ |x| (x.product.price*x.quantity*discount) }.inject(:+) || 0
+      
+       #@pmtable = @line_items.select { |line_item| line_item.good.is_suit? }.size == 0
 
     end
 

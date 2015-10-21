@@ -8,7 +8,7 @@ class ValidationMailer < ActionMailer::Base
   	site  = "http://www.baohengbio.com/"
   	site  = "http://www.baohengbio.com/" if Rails.env == "production"
   	@verify_email_url = "#{site}/validation/verify_email?u=#{user.member_id}&token=#{user.email_code}"
-  	mail(:to => user.email, :subject => "佐康茶验证邮件")
+  	mail(:to => user.email, :subject => "佐康原生态食品茶验证邮件")
   end
 
 

@@ -15,21 +15,10 @@
 				    <%=f.hidden_field :goods_id,:value=>@good.goods_id%>
 				    <%=f.hidden_field :type_id,:value=>@good.type_id%>                    
                     <div class="col-sm-4">
-                        <ul class="plan">                         	                          
-                           
-                            <% if signed_in? %>
-                                <%if @user.discount_code%>
-                                 <li class="plan-price"> 特惠码价
-                                   ￥<span id="product_price"><%=@good.default_product.price if @good.default_product%></span></li>
-                                   <li class="plan-name">会员价：￥<span style="text-decoration:line-through"><%=@good.default_product.mktprice if @good.default_product%></span></li>
-                                <%else%>
-                                   <li class="plan-price"> 会员价：￥<span id="product_price"><%=@good.default_product.mktprice if @good.default_product%></span></li>
-                                <%end%>
-					        <% else %>
-					            <!-- <a href="/login" class="login" style="font-size:14px;color:#D30000;">[会员专享]</a> -->
-                                <li class="plan-price"> 会员价：￥<span id="product_price"><%=@good.default_product.mktprice if @good.default_product%></span></li>
-					       <%end%>
-                            <li><a href="/login">输入特惠码优惠购买佐餐茶：买二送一</a></li>
+                        <ul class="plan featured">
+                            <li class="plan-price1 <%=@current_lv_3%>"> 钻石卡会员价：￥<span id="product_price"><%=@good.price*0.75 if @good.price%></span></li>
+                            <li class="plan-price2 <%=@current_lv_2%>"> 贵宾卡会员价：￥<span id="product_price"><%=@good.price*0.9 if @good.price%></span></li>
+                            <li class="<%=@current_lv_1%>">会员价：￥<%=@good.default_product.price if @good.default_product%></span></li>                                          
                             
                             <li><%=render :partial=>"store/goods/product/new_spec",:locals=>{ :good=>@good }%></li>
                             <li><%=raw @good.desc%></li> 
@@ -57,7 +46,7 @@
                 <div class="center">
                     <p class="lead">
                         商品详情<br>
-						<img src="/img/qinghong.jpg" style="width:100%">
+                        <div class="goods-detail"> <%=raw @good.intro%></div>
                     </p>
                 </div>
                 <div class="gap"></div>
@@ -84,6 +73,44 @@
 </div>
 </div>
 </section>
+<script>  
+// TBD  异步加载商品详情
+    // var floor_id = 1;
+    // var floors_num =3;
+    // //定义滚动函数
+    // function onScroll(event) {
+    //     //是否到底部（这里是判断离底部还有100px开始载入数据）.
+    //     var closeToBottom = ($(window).scrollTop() + $(window).height() > $(document).height() - 100);
+    //     if(closeToBottom && floor_id<=floors_num) {
+    //         console.log(floor_id);
+            
+    //         //这里就是AJAX载入的数据
+    //         var floor_url ="/goods/detail/"+goods_id;
+    //         $.ajax({url:floor_url, dataType:"html", success:function(html){
+    //                  //把新数据追加到对象中
+    //                  $('#waterfall').append(html);
+    //                 if(floor_id<floors_num){
+    //                     $('#waterfall').append($('#floor_temp'));
+    //                 }
+    //                 else{
+    //                      $('#floor_temp').remove();
+    //                 }
+                    
+    //             }
+    //         });
+    //         floor_id = floor_id +1;
+    //     }
+    // };
+
+    // $(document).ready(new function() {
+    //         //绑定scroll事件.
+    //         $(document).bind('scroll', onScroll);
+    //         //第一次布局.
+    //         // handler = $('#waterfall li');
+    //         // handler.wookmark(options);
+    // });   
+</script>
+
 
 <script type="text/javascript">
   window.onload = function() {

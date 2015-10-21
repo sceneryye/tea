@@ -1,6 +1,6 @@
 #encoding:utf-8
 class ResetPasswordMailer < ActionMailer::Base
-  default from: "佐康茶<cs@iotps.com>"
+  default from: "佐康原生态食品茶<cs@iotps.com>"
 
 
   def reset_password_email(user)

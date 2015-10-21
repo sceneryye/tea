@@ -20,8 +20,8 @@
                         <li class="outlink"><a href="/member_addrs">收货地址</a></li>
                         <li class="outlink"><a href="/validation">账户安全</a></li>
                         <li class="outlink"><a href="/profile/password">修改密码</a></li>
-                        <%if @user.member_lv_id==2%>
-                            <li class="outlink"><a href="/member/shares">我的返利</a></li>
+                        <%if @user.member_lv_id>1%>
+                            <li class="outlink"><a href="/member/advance">我的预存款</a></li>
                         <%end%>
                         <li class="outlink"><a href="/logout">退出登录</a></li>
                     <%else%>

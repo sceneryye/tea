@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="col-sm-1 form-group">
-              <span class="visible-xs">单价</span><span> ￥<%= format('%.2f',line_item.product.price)%></span>
+              <span class="visible-xs">单价</span><span> ￥<%= format('%.2f',line_item.product.price*@user.member_lv.dis_count)%></span>
             </div>
             <div class="col-sm-1 form-group">
             <span class="visible-xs">数量</span>
@@ -40,12 +40,12 @@
             </div>
             <span class="visible-xs">总价</span>
             <div class="col-sm-1 line-total form-group">
-              ￥<%=(line_item.product.price*line_item.quantity)%>
+              ￥<%=(line_item.product.price*line_item.quantity*@user.member_lv.dis_count)%>
             </div>
-            <span class="visible-xs">积分</span>
+            <!-- <span class="visible-xs">积分</span>
             <div class="col-sm-1 line-total form-group">
               <%=(line_item.product.price*line_item.quantity)%>分
-            </div>
+            </div> -->
             <div class="col-sm-2 form-group">
               <%=link_to "删 除",cart_path(line_item.obj_ident),:class=>"delete btn btn-danger",:remote=>true,:method=>:delete,:style=>"color:white"%>
             </div>

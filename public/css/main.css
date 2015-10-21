@@ -328,20 +328,33 @@ a:focus {
   margin: 0 15px;
   border-bottom: 1px dashed #eee;
 }
-.pricing .plan li.plan-name {
+.pricing .plan .plan-name {
   padding: 15px 0;
   font-size: 18px;
   font-weight: 700;
 }
-.pricing .plan li.plan-price {
+.pricing .plan .plan-price {
   color: #64ca4c;
   padding: 15px 0;
-  font-size: 30px;
+  font-size: 25px;
 }
-.pricing .plan li.plan-action {
+.pricing .plan .plan-price1 {
+  color: #64ca4c;
+  padding: 5px 10px;
+  font-size: 20px;
+}
+.pricing .plan .plan-price2{
+  color:#019858;
+  padding: 5px 0;
+  font-size:15px;
+}
+.pricing .plan .plan-action {
   margin-top: 20px;
   margin-bottom: 20px;
   border-bottom: 0;
+}
+.pricing .plan .product-pic img {
+  width:90%;
 }
 .pricing .plan.featured {
   -webkit-transform: scale(1.05);
@@ -637,3 +650,5 @@ textarea#message {
   }
 }
 .menu-login a{font-size:0.5em; float:right;}
+
+.goods-detail img{width:100%;}

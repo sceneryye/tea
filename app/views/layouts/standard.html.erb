@@ -18,7 +18,7 @@ var iswxb= isWeixinBrowser();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>佐康茶</title>
+    <title>佐康原生态食品</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/prettyPhoto.css" rel="stylesheet">
@@ -49,13 +49,12 @@ var iswxb= isWeixinBrowser();
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#main-slider"><i class="icon-home"></i></a></li>
-                        <li><a href="#products">产品中心</a></li>
-                        <li><a href="#membership">会员专享</a></li>
-                        <li><a href="#portfolio">佐康茶介绍</a></li>
-                        <li><a href="#specialist">专家顾问</a></li>                    
-                        <li><a href="#services">案例分享</a></li>                        
-                        <li><a href="#contact">联系我们</a></li>    
+                        <li class="outlink active"><a href="/home#main-slider"><i class="icon-home"></i></a></li>
+                        <li class="outlink"><a href="/gallery/5">产品中心</a></li>
+                        <li class="outlink"><a href="/brands">品牌推介</a></li>
+                        <li class="outlink"><a href="/pages/membership">会员专享</a></li>
+                        <li class="outlink"><a href="/pages/about_zuokang">关于我们</a></li>                      
+                        <li class="outlink"><a href="/home#contact">联系我们</a></li>    
                         <li class="outlink"><a href="/member">会员中心</a></li>
                         <li class="outlink menu-login" style="display:none">
                             <%if @user%>
@@ -71,5 +70,10 @@ var iswxb= isWeixinBrowser();
     <%= yield%>
     
     <%= render "/shared/footer" %>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.isotope.min.js"></script>
+    <script src="/js/jquery.prettyPhoto.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>

@@ -141,7 +141,7 @@ module ModecPay
 				//	document.getElementById("pay_form").submit();
 			//	}
 				</script>
- <script language="javascript" type="text/javascript">
+     <script language="javascript" type="text/javascript">
       function auto_remove(img){
           div=img.parentNode.parentNode;div.parentNode.removeChild(div);
           img.onerror="";
@@ -166,12 +166,12 @@ module ModecPay
                   "paySign" : "#{self.fields['pay_sign']}" //微信签名
               },function(res){
 
-// 返回res.err_msg,取值
-//get_brand_wcpay_request:cancel 用户取消
-//get_brand_wcpay_request:fail 发送失败
-//get_brand_wcpay_request:ok 发送成功
-//WeixinJSBridge.log(res.err_msg);
-//alert(res.err_code+res.err_desc);
+          // 返回res.err_msg,取值
+          //get_brand_wcpay_request:cancel 用户取消
+          //get_brand_wcpay_request:fail 发送失败
+          //get_brand_wcpay_request:ok 发送成功
+          //WeixinJSBridge.log(res.err_msg);
+          //alert(res.err_code+res.err_desc);
 
 
                   if(res.err_msg == "get_brand_wcpay_request:ok" ) {
@@ -215,15 +215,15 @@ module ModecPay
               });
           });
       }
-  </script>
-</head>
-<body>
-<div class="WCPay" >
-  <a id="getBrandWCPayRequest" href="javascript:void(0);"><h1 class="title">点击支付</h1></a>
- <script language="javascript" type="text/javascript">
-document.getElementById("getBrandWCPayRequest").click();
-</script>
-</div>
+            </script>
+          </head>
+          <body>
+          <div class="WCPay" >
+            <a id="getBrandWCPayRequest" href="javascript:void(0);"><h1 class="title">点击支付</h1></a>
+           <script language="javascript" type="text/javascript">
+          document.getElementById("getBrandWCPayRequest").click();
+          </script>
+          </div>
 				</body>
 				</html>
       FORM

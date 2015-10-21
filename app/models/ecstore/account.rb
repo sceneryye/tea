@@ -15,7 +15,8 @@ class Ecstore::Account < Ecstore::Base
   	has_many :commission,:foreign_key=>"member_id"
 
 
-	attr_accessible :auth_ext_id, :login_name, :login_password,:account_type, :login_password_confirmation, :email, :mobile,:real_name,:discount_code, :follow_imodec,:license,:current_password
+	attr_accessible :auth_ext_id, :login_name, :login_password,:account_type, :login_password_confirmation, :email, :mobile,:real_name,:follow_imodec,:license,:current_password
+	#:discount_code
 	attr_accessor :license,:current_password
 
 
@@ -40,7 +41,7 @@ class Ecstore::Account < Ecstore::Base
 
     validates :license, :presence=>{:presence=>true,:message=>"您还没有阅读注册协议"}, :if=>Proc.new{ |c| c.new_record? }
 
-	validate :check_login_name_duplicated,:check_email_duplicated,:check_mobile_duplicated,:check_discount_code_availability
+	validate :check_login_name_duplicated,:check_email_duplicated,:check_mobile_duplicated #,:check_discount_code_availability
 
 	def check_login_name_duplicated
 		return if self.login_name.blank? || self.errors[:login_name].present?
@@ -51,12 +52,12 @@ class Ecstore::Account < Ecstore::Base
 		end
 	end
 
-	def check_discount_code_availability
-		c = Ecstore::DiscountCode.where("code='#{self.discount_code}' and status='true")
-		if self.discount_code.present? && c.empty?
-			errors.add(:discount_code, "特惠码无效！")
-		end
-	end
+	# def check_discount_code_availability
+	# 	c = Ecstore::DiscountCode.where("code='#{self.discount_code}' and status='true")
+	# 	if self.discount_code.present? && c.empty?
+	# 		errors.add(:discount_code, "特惠码无效！")
+	# 	end
+	# end
 
 	def check_mobile_duplicated
 	    if self.mobile.present? and u = Ecstore::User.find_by_mobile(self.mobile) and  new_record?
@@ -237,14 +238,14 @@ class Ecstore::Account < Ecstore::Base
 		self.user.mobile if self.user
 	end
 
-	def discount_code=(val)
-		self.user = Ecstore::User.new unless self.user
-		self.user.discount_code = val
-	end
+	# def discount_code=(val)
+	# 	self.user = Ecstore::User.new unless self.user
+	# 	self.user.discount_code = val
+	# end
 
-	def discount_code
-		self.user.discount_code if self.user
-	end
+	# def discount_code
+	# 	self.user.discount_code if self.user
+	# end
 
 	def real_name=(val)
 		self.user = Ecstore::User.new unless self.user

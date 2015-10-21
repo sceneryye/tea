@@ -105,24 +105,6 @@ class Store::OrdersController < ApplicationController
     end
   end
 
-  def index_mobile             ###手机订单
-    supplier_id = params[:supplier_id]
-    if  @user
-      if supplier_id == nil
-        supplier_id=78
-      end
-      @supplier = Ecstore::Supplier.find(supplier_id)
-      @orders =  @user.orders.order("createtime desc")
-
-      if params["platform"]=="mobile"
-        render :layout=>@supplier.layout
-      end
-    else
-      return_url={:return_url => "/goods?platform=mobile&supplier_id=#{params[:supplier_id]}"}.to_query
-      redirect_to "/auto_login?#{return_url}&id=#{params[:supplier_id]}"
-    end
-  end
-
   def show
 
     @order = Ecstore::Order.find_by_order_id(params[:id])

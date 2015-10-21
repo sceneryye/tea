@@ -1,38 +1,64 @@
 <%=render "shared/metable", :resource=>nil%>
 
-<%=content_for :head do%>
-<%= stylesheet_link_tag "store/brands" %>
-<%end%>
-
 <%=content_for :cover do%>
 	<%=raw Ecstore::Config.get(:brand_cover) %>
 <%end%>
+<section id="about-us">
+        <div class="container">
+            <div class="box">
+                <div class="center">
+                    <h2>品牌推荐</h2>
+                    <p class="lead">佐康原生态食品<br>推荐品牌</p>
+                </div>
+                <div class="gap"></div>
+                <div id="team-scroller" class="carousel scale">
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <div class="row">
+                            <%i=0%>
+                            <%@brands.each do |brand|%>
+                            <%i=i+1%>
+                                <div class="col-sm-4">
+                                    <div class="member">
+                                        <p>
+                                        	<%=link_to brand_path(brand),:class=>"name #{brand.status}" do%>
+                                            <%=image_tag brand.brand_page.logo_url,:alt=>brand.brand_name,:class=>'img-responsive img-thumbnail img-circle'%>
+                                        	<%end%>
+                                        </p>
+                                        <h3>
+	                                        <%=link_to brand_path(brand),:class=>"name #{brand.status}" do%>
+												<%=brand.brand_name%>
+												<%=image_tag '/assets/store/hot2.gif' if brand.status=='special'%>
+												<%=image_tag '/assets/store/new.png' if brand.status=='new'%>
+											<%end%>
+											<small class="designation">
+												<%=link_to truncate2(brand.brand_desc.html_safe,:length=>30),brand_path(brand),:class=>"desc",:title=>brand.brand_desc.html_safe%>
+											</small>
+											<%if brand.status == 'coming'%>
+												<div><%=image_tag '/assets/store/comingsoon2.gif'%></div>
+											<%end%>
+										</h3>									
+                                    </div>
+                                </div>
+                                <%if i%3==0 && i<@brands.size%>
+                                	 </div>
+			                        </div>
+			                        <div class="item">
+			                            <div class="row">
+                                <%end%>
+                            <%end%>                               
+                            </div>
+                        </div>                        
+                    </div>
+                    <a class="left-arrow" href="#team-scroller" data-slide="prev">
+                        <i class="icon-angle-left icon-4x"></i>
+                    </a>
+                    <a class="right-arrow" href="#team-scroller" data-slide="next">
+                        <i class="icon-angle-right icon-4x"></i>
+                    </a>
+                </div><!--/.carousel-->
+            </div><!--/.box-->
+        </div><!--/.container-->
+    </section><!--/#about-us-->
 
-<%render "store/shared/brand_position"%>
-<div class="container">
-
-	<ul class="brands clearfix">
-		<div class="title">品牌索引</div>
-
-		<%@brands.each do |brand|%>
-			<li>
-				<div>
-				<%=link_to brand_path(brand),:class=>"name #{brand.status}" do%>
-					<%=brand.brand_name%>
-					<%=image_tag '/assets/store/hot2.gif' if brand.status=='special'%>
-					<%=image_tag '/assets/store/new.png' if brand.status=='new'%>
-				<%end%>
-				</div>
-				<div>
-					<%=link_to truncate2(brand.brand_desc.html_safe,:length=>15),brand_path(brand),:class=>"desc",:title=>brand.brand_desc.html_safe%>
-				</div>
-				<%if brand.status == 'coming'%>
-				<div><%=image_tag '/assets/store/comingsoon2.gif'%></div>
-				<%end%>
-
-			</li>
-		<%end%>
-	</ul>
-</div>
-<%=javascript_include_tag "bootstrap-transition","bootstrap-carousel"%>
 

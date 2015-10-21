@@ -75,15 +75,15 @@
 		<%end%>
       <label class="radio" style="display:none">
         <%=f.radio_button :payment, "alipay"%> <b>支付宝</b>
-        <span class="extra-desc"><img src="/assets/store/alipay.png"/></span>
+        <!-- <span class="extra-desc"><img src="/assets/store/alipay.png"/></span> -->
       </label>
       <label class="radio"  style="display:none">
         <%=f.radio_button :payment, "alipaywap"%> <b>支付宝手机</b>         
-        <span class="extra-desc"><img src="/assets/store/alipaywap.png"/></span>
+      <!--   <span class="extra-desc"><img src="/assets/store/alipaywap.png"/></span> -->
       </label>
       <label class="radio">
         <%=f.radio_button :payment, "wxpay", :checked=>true%> <b>微信支付</b>
-        <span class="extra-desc"><img src="/assets/store/wxpay.png"/></span>
+       <!--  <span class="extra-desc"><img src="/assets/store/wxpay.png"/></span> -->
       </label>
       <label class="radio">
         <%=f.radio_button :payment, "offline"%> <b>货到付款</b>
@@ -92,6 +92,7 @@
 
 		<%if @user.advance >= @cart_total%>
 	 	<label class="radio" >
+	 		<%=f.check_box :part_pay, { :checked=>true, :'data-amount'=>@user.advance, :id=>"advance" }, @user.advance, 0%> 
 			<%=f.radio_button :payment, "deposit"%> <b>预存款</b>
 		</label>
 		<%end%>
@@ -103,7 +104,7 @@
 				<th>商品名称</th>
 				<th>单价</th>
 				<th>数量</th>
-				<th>金额小计</th>
+				<th>小计</th>
 			</tr>
 			
 			<%@line_items.each do |line_item|%>
@@ -122,19 +123,12 @@
 					</div>
 				</td>
 				<td>
-                  <%if cookies[:MLV] == "10"%>
-                    <%=number_to_currency line_item.product.bulk,:unit=>"&yen;",:precision=>2%>
-                  <%else%>
-                      <%=number_to_currency line_item.product.price,:unit=>"&yen;",:precision=>2%>
-                  <%end%>
+                 
+                      <%=number_to_currency line_item.product.price*@user.member_lv.dis_count,:unit=>"&yen;",:precision=>2%>
                 </td>
 				<td><%=line_item.quantity%></td>
 				<td>
-                  <%if cookies[:MLV] == "10"%>
-					   <%=number_to_currency line_item.line_total_bulk,:unit=>"&yen;",:precision=>2%>
-                  <%else%>
-                      <%=number_to_currency line_item.line_total,:unit=>"&yen;",:precision=>2%>
-                  <%end%>
+                      <%=number_to_currency line_item.line_total*@user.member_lv.dis_count,:unit=>"&yen;",:precision=>2%>
 				</td>
 				</tr>
 			<%end%>
@@ -152,10 +146,10 @@
 	</div>
 	<%end%>
 
-        <div class="section promotions">
+        <!-- <div class="section promotions">
           <h5>特惠码: </h5>
           <%=f.text_field :discount_code,:value=>@user.discount_code%>
-        </div>
+        </div> -->
 	<div class="section checkout clearfix">
 		<h5>结算信息</h5>
 		<div class="left">
@@ -181,21 +175,14 @@
 				</div>
 			</div>
 			<div class="cost" id="order_cost">
-				<!-- <div class="item">
+				<div class="item">
 					<span class="text">商品总额：</span>
 					<span class="rmb-symbol">￥</span>
 					<span class="money" data-amount="<%=@cart_total%>" id="cart_amount">
 						<%=@cart_total%> 
 					</span>
-				</div> -->
-				<div class="item">
-					<span class="text">商品总额：</span>
-					<span class="rmb-symbol">￥</span>
-					<span class="money sum" data-amount = "<%=@cart_total%>" id="order_amount">
-						<%=@cart_total %>
-					</span>
 				</div>
-
+				
 				<%if @order_promotions.present? || @goods_promotions.present? %>
 				<div class="item">
 					<span class="text">优惠：</span>
@@ -232,13 +219,7 @@
 				</div>
 				<%end%>
 				
-				<div class="item bcom" for="#order_payment_bcom" style="display:none">
-					<span class="text">支付优惠(交通银行)：</span>
-					<span class="rmb-symbol">￥</span>
-					<span class="money bcom-discount" id="bcom_discount"></span>
-				</div>
-
-
+				
 				<div class="item">
 					<span class="text">支付金额：</span>
 					<span class="rmb-symbol">￥</span>

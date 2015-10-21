@@ -1,102 +1,145 @@
-<div class="sorter">
-	<span>排序: </span>
-	<%
-		query_hash = {}
-		# query_hash[:color] = params[:color] if params[:color]
-		# query_hash[:brand] = params[:brand] if params[:brand]
-		# query_hash[:cat_id] = params[:cat_id] if params[:cat_id]
-		params_hash = params.dup
+ 
+		<ul class="portfolio-filter">
+			<li>排序: </li>
+			<%
+				query_hash = {}
+				# query_hash[:color] = params[:color] if params[:color]
+				# query_hash[:brand] = params[:brand] if params[:brand]
+				# query_hash[:cat_id] = params[:cat_id] if params[:cat_id]
+				params_hash = params.dup
 
-		params_hash.delete(:controller)
-		params_hash.delete(:action)
-		params_hash.delete(:order)
+				params_hash.delete(:controller)
+				params_hash.delete(:action)
+				params_hash.delete(:order)
 
-		query = params_hash.to_query
-	%>
-
-	<%if params[:order].blank?%>
-		<%=link_to "价格&uarr;".html_safe,"?order=price-asc&#{query}",:title=>"价格从低往高"%>
-	<%elsif  params[:order] == "price-asc"%>
-		<%=link_to "价格&uarr;".html_safe,"?order=price-desc&#{query}",:title=>"价格从低往高"%>
-	<%else params[:order] =='price-desc'%>
-		<%=link_to "价格&darr;".html_safe,"?order=price-asc&#{query}",:title=>"价格从高往低"%>
-	<%end%>
-
-	<%=link_to "销量&darr;".html_safe,"?order=buy_count-desc&#{query}",:title=>"价格从高往低"%>
-	<%=link_to "人气&darr;".html_safe,"?order=view_count-asc&#{query}",:title=>"人气从高往低"%>
-
-	<div class="pagination top">
-		<%=will_paginate @goods,:container=>false if @goods%>
-	</div>
-</div>
-
-<ul class="list clearfix" id="goods">
-	<%@goods.each do |good|%>
-		<%if good.price!=0 || cookies[:MLV] == "10" %>
-	<li>
-		<div class="good-pic good-<%=good.goods_id%>">
-			<%=link_to good_path(good.bn), :target=>"_blank" do %>
-				<%=image_tag good.list_default_pic,:alt=>good.name,:class=>"default"%>
-				<%#=image_tag good.list_hover_pic,:alt=>good.name,:class=>"hover"%>
-			<%end%>
-		</div>
-		<div class="good-info">
-			<div class="brand">
-				<%if controller_name == "search" && good.brand%>
-					<%
-					      dup_brand = good.brand.brand_name.dup
-						@splits.each do |part|
-							regex = Regexp.new(part,Regexp::IGNORECASE)
-							dup_brand.gsub! regex do |match|
-								"<span class='highlight'>#{match}</span>"
-							end
-						end
-					%>
-					<%=dup_brand.html_safe%>
-				<%else%>
-					<%=good.brand.brand_name if good.brand%>
+				query = params_hash.to_query
+			%>
+			<li>
+				<%if params[:order].blank?%>
+					<%=link_to "价格&uarr;".html_safe,"?order=price-asc&#{query}",:title=>"价格从低往高",:class=>"btn btn-primary"%>
+				<%elsif  params[:order] == "price-asc"%>
+					<%=link_to "价格&uarr;".html_safe,"?order=price-desc&#{query}",:title=>"价格从低往高",:class=>"btn btn-primary"%>
+				<%else params[:order] =='price-desc'%>
+					<%=link_to "价格&darr;".html_safe,"?order=price-asc&#{query}",:title=>"价格从高往低",:class=>"btn btn-primary"%>
 				<%end%>
-
-			</div>
-			<div class="name">
-				<%if controller_name == "search"%>
-					<%=link_to good_path(good.bn),:target=>"_blank" do%>
-						<%
-						      dup_name = good.name
-							@splits.each do |part|
-								regex = Regexp.new(part,Regexp::IGNORECASE)
-								dup_name.gsub! regex do |match|
-									"<span class='highlight'>#{match}</span>"
+			</li>
+			<li>
+				<%=link_to "销量&darr;".html_safe,"?order=buy_count-desc&#{query}",:title=>"价格从高往低",:class=>"btn btn-primary"%>
+			</li>
+			<li><%=link_to "人气&darr;".html_safe,"?order=view_count-asc&#{query}",:title=>"人气从高往低" ,:class=>"btn btn-primary"%></li>
+		</ul>
+		<div class="pagination top">
+			<%=will_paginate @goods,:container=>false if @goods%>
+		</div>
+                    
+		<!-- <ul class="portfolio-items" id="goods">
+			<%@goods.each do |good|%>
+			<li  class=" plan portfolio-item">
+			<div class="item-inner" >
+				<div class="good-pic good-<%=good.goods_id%>">
+					<%=link_to good_path(good.bn), :target=>"_blank" do %>
+						<%=image_tag good.list_default_pic,:alt=>good.name,:class=>"default"%>
+						<%#=image_tag good.list_hover_pic,:alt=>good.name,:class=>"hover"%>
+					<%end%>
+				</div>
+				<div class="good-info">
+					<div class="brand">
+						<%if controller_name == "search" && good.brand%>
+							<%
+							      dup_brand = good.brand.brand_name.dup
+								@splits.each do |part|
+									regex = Regexp.new(part,Regexp::IGNORECASE)
+									dup_brand.gsub! regex do |match|
+										"<span class='highlight'>#{match}</span>"
+									end
 								end
-							end
-						%>
-						<%=dup_name.html_safe%>
-					<%end%>
-				<%else%>
-					<%=link_to good.name,good_path(good.bn),:target=>"_blank"%>
-				<%end%>
-			</div>
-			<div class="prices">
-				<span>
+							%>
+							<%=dup_brand.html_safe%>
+						<%else%>
+							<%=good.brand.brand_name if good.brand%>
+						<%end%>
 
-					会员价:
-					<%if signed_in?%>
-					&yen;<%=good.price%>
-					<%else%>
-					<a href="javascript:void(0);" class="login">会员专享</a>
-					<%end%>
+					</div>
+					<div class="name">
+						<%if controller_name == "search"%>
+							<%=link_to good_path(good.bn),:target=>"_blank" do%>
+								<%
+								      dup_name = good.name
+									@splits.each do |part|
+										regex = Regexp.new(part,Regexp::IGNORECASE)
+										dup_name.gsub! regex do |match|
+											"<span class='highlight'>#{match}</span>"
+										end
+									end
+								%>
+								<%=dup_name.html_safe%>
+							<%end%>
+						<%else%>
+							<%=link_to good.name,good_path(good.bn),:target=>"_blank"%>
+						<%end%>
+					</div>
+					<div class="prices">
+						<span>
 
-				</span>
-				<span class="mtkprice">市场价: &yen;<%=good.mktprice%></span>
+							会员价:
+							<%if signed_in?%>
+							&yen;<%=good.price%>
+							<%else%>
+							<a href="javascript:void(0);" class="login">会员专享</a>
+							<%end%>
+
+						</span>
+						<span class="mtkprice">市场价: &yen;<%=good.mktprice%></span>
+					</div>
+				</div>
 			</div>
+			</li>
+			<%end if @goods%>
+		</ul> -->
+
+		<div id="pricing-table" class="row">
+                 <ul class="portfolio-items">
+            		<%@goods.each do |goods|%>
+                    <li class=" plan portfolio-item category<%=goods.cat.cat_id%>" style="margin-left:20px">
+
+                    	<div class="item-inner" >
+                    	<!-- <div class="col-sm-4"> -->
+                        
+                        <div class="plan-name"><%=goods.name%></div>
+                           <div class="product-pic">
+                                <%=link_to good_path(goods.bn), :target=>"_blank" do %>
+                                    <%=image_tag goods.list_default_pic,:alt=>goods.name%>
+                                    <%#=image_tag goods.list_hover_pic,:alt=>goods.name,:class=>"hover"%>
+                                <%end%>
+                            </div>
+
+                           <!--  <div class="portfolio-image">
+                               <%=image_tag goods.list_default_pic,:alt=>goods.name%>
+                                <div class="overlay">
+                                    <a class="preview btn" title="Lorem ipsum dolor sit amet" href="<%=goods.big_pic%>"><i class="icon-eye-open"></i></a>  
+                                </div>
+                            </div>  -->
+
+                            <div class="plan-price1">钻石卡会员价： &yen;<%=goods.price*0.75%></div>
+                            <div class="plan-price2">贵宾卡会员价： &yen;<%=goods.price*0.9%></div>
+                            <div>佐康原生态食品价： &yen;<%=goods.price%></span></div>  
+                            <!-- <li>市场价： &yen;<span style="text-decoration:line-through;"><%=goods.mktprice%></span></li>      -->                       
+                            <!-- <div class="plan-action">
+                            <%=link_to "查看详情",good_path(goods.bn),:target=>"_blank",:class=>"btn btn-primary btn-lg"%>
+		                            </div> -->
+		                    </div>
+		                    </li>
+		            <%end%> 
+		        	</ul>
+                </div> 
+		<div class="clearfix"></div>
+
+		<div class="pagination">
+			<%=will_paginate @goods,:container=>false if @goods%>
 		</div>
-	</li>
+            
+                
+   
 
-	<%end%>
-	<%end if @goods%>
-</ul>
-<div class="clearfix"></div>
 
-<div class="pagination">
-	<%=will_paginate @goods,:container=>false if @goods%>
-</div>
+

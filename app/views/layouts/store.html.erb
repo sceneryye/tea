@@ -20,14 +20,15 @@
   <title><%=page_title%></title>
   <meta name="keywords" content="<%=meta_keywords%>" />
   <meta name="description" content="<%=meta_description%>" />
-  <%= javascript_include_tag "store/new_base" %>
-  <%= javascript_include_tag "store/new_#{controller_name}" %>
+  
 </head>
 <body>
   <%= render "/shared/header" %>
   <%= yield %>
  
   <%=render "/shared/footer"%>
+  <%= javascript_include_tag "store/new_base" %>
+  <%= javascript_include_tag "store/new_#{controller_name}" %>
 </body>
 </html>
 

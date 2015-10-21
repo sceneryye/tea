@@ -1,6 +1,6 @@
 #encoding:utf-8
 class Store::CartController < ApplicationController
-	# before_filter :find_user
+	 before_filter :find_user
 
 
   def index
@@ -27,6 +27,9 @@ class Store::CartController < ApplicationController
 
 	
 	def add
+    if @user.nil?
+       return redirect_to  "/login"
+    end
 		# parse params
 		specs = params[:product].delete(:specs)
 		customs = params[:product].delete(:customs)
