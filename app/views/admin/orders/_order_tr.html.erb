@@ -2,9 +2,7 @@
 	<td>
 		<%= check_box_tag nil, order.order_id, false,:id=>"check_#{order.order_id}",:class=>"order"%>
 	</td>
-	<td><%=order.order_id%></td>
-	
-	<td><%=link_to "详细",detail_admin_order_path(order),:target=>"_blank"%></td>
+	<td> <%=link_to order.order_id,detail_admin_order_path(order),:target=>"_blank",:title=>"查看详细"%></td>
   <%if current_admin.has_right_of("orders","delivery")%>
 	<td class="dropdown">
 		<%if order.status == "active"%>
@@ -61,7 +59,7 @@
     <td><%#=number_to_currency order.commission,:unit=>"&yen;",:precision=>2 if order.desktop_user_id || order.recommend_user%></td>
     <td><%=number_to_currency order.cost_freight,:unit=>"&yen;",:precision=>2%></td>
 	<td><%=order.ship_name%></td>
-	<td><%=order.ship_addr%></td>
+	<td style="width:150px"><%=order.ship_addr%></td>
 	<td><%=order.ship_mobile%></td>
 </tr>
 <%#@total_commission +=order.commission%>
