@@ -3,7 +3,8 @@ require 'sms'
 class Memberships::CardsController < ApplicationController
 	# skip_before_filter :authorize_user!
 	before_filter :find_user
-	layout 'memberships'
+	#layout 'memberships'
+	layout 'simple'
 
 	def show
 		if params[:card].has_key?(:card_no)
