@@ -38,11 +38,7 @@
 		<%if @user.sms_validate=='true'%>
 		<span class="tip">手机已认证</span>
 		<%end%>
-	</div>
-	<div class="field">
-		<label>特惠码:</label>
-		<%=f.text_field :discount_code%>
-	</div>
+	</div>	
 	<div class="field">
 		<label>收货区域:</label>
 		<%=f.hidden_field :area%>

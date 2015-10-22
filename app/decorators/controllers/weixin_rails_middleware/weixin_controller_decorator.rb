@@ -77,7 +77,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
 
         title="您的总佣金收益是: #{share}元"
         desc ="查看佣金详情请点击"
-        pic_url='http://www.baohengbio.com/assets/vshop/commission_banner.jpg'
+        pic_url='http://www.trade-v.com/assets/vshop/commission_banner.jpg'
         link_url="http://www.baohengbio.com/share?FromUserName=#{user}&supplier_id=#{id}"
 
         title1="如何轻松赚佣金"
@@ -89,7 +89,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       when 'subscribe'
         title="您好，佐康原生态食品欢迎您的光临！"
         desc =""
-        pic_url="http://www.baohengbio.com/images/a0#{id}/homepage/slide_bg.gif"
+        pic_url="http://www.baohengbio.com/images/a01/homepage/slider-bg.gif"
         link_url="http://www.baohengbio.com/"     
         articles = [generate_article(title, desc, pic_url, link_url)]
      

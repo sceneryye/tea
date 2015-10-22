@@ -15,11 +15,10 @@
                         <li style="display:none"><a href="/"><i class="icon-home"></i></a></li>
                     <%if @user%>
                         <li class="outlink"><a href="/member/orders">我的订单</a></li>
-                        <li class="outlink"><a href="/cart">我的购物车</a></li>
+                        <li class="outlink"><a href="/cart">我的购物车</a></li>                        
+                        <li class="outlink"><a href="/member/favorites">我的收藏</a></li>
                         <li class="outlink"><a href="/profile">个人信息</a></li>
                         <li class="outlink"><a href="/member_addrs">收货地址</a></li>
-                        <li class="outlink"><a href="/validation">账户安全</a></li>
-                        <li class="outlink"><a href="/profile/password">修改密码</a></li>
                         <%if @user.member_lv_id>1%>
                             <li class="outlink"><a href="/member/advance">我的预存款</a></li>
                         <%end%>

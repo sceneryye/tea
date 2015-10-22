@@ -37,11 +37,7 @@
 		<%else%>
 		<%=link_to "去验证>>","/validation/email",:class=>"modify",:target=>"_top"%>
 		<%end%>
-	</div>
-	<div class="field">
-		<label>特惠码:</label>
-		<%=f.text_field :discount_code%>
-	</div>
+	</div>	
 	<div class="field">
 		<label>收货区域:</label>
 		<%=f.hidden_field :area%>
