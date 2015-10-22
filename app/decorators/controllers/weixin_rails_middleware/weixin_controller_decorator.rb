@@ -87,7 +87,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
 
         articles = [generate_article(title, desc, pic_url, link_url),generate_article(title1, desc1, pic_url1, link_url1)]
       when 'subscribe'
-        title="您好，佐康原生态食品欢迎您的光临！"
+        title="您好，佐康家人们！"
         desc =""
         pic_url="http://www.baohengbio.com/images/a01/homepage/slider-bg.gif"
         link_url="http://www.baohengbio.com/"     
