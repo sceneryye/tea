@@ -9,9 +9,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       when '地址'
         render xml: send("response_location_message", {})      
       when '测试'
-        render xml: send("response_news_message", {})
-      when '买'
-        render xml: send("response_news_message", {})      
+        render xml: send("response_news_message", {})    
       else
        render xml: send("response_#{@weixin_message.MsgType}_message", {})
     end
@@ -39,13 +37,6 @@ WeixinRailsMiddleware::WeixinController.class_eval do
         link_url1="http://www.baohengbio.com/pages/#{@weixin_public_account.url}_aboutus"
 
         articles = [generate_article(title, desc, pic_url, link_url),generate_article(title1, desc1, pic_url1, link_url1)]
-
-      when '买'
-        title="[测试商品]-----------------"
-        desc ="测试商品0.01元，佣金3.00元"
-        pic_url="http://www.baohengbio.com/images/a072/a0729002_b_1.jpg"
-        link_url="http://www.baohengbio.com/mproducts?id=a980000&fp=mproducts&supplier_id=#{id}"
-        articles = [generate_article(title, desc, pic_url, link_url)]
 
       when 'on_sale'
         title="法兰克福香肠350克/ Frankfurter Sausages 350g仅售¥40元"
@@ -87,10 +78,10 @@ WeixinRailsMiddleware::WeixinController.class_eval do
 
         articles = [generate_article(title, desc, pic_url, link_url),generate_article(title1, desc1, pic_url1, link_url1)]
       when 'subscribe'
-        title="您好，佐康家人们！"
-        desc =""
-        pic_url="http://www.baohengbio.com/images/a01/homepage/slider-bg.gif"
-        link_url="http://www.baohengbio.com/"     
+        title="您好！佐康原生态食品欢迎您！"
+        desc ="鲶鱼沟人，用智慧和生命力，在这片土地上完成了伟大的孕育。在碱性环境里培植优质营养的碱地大米、五谷杂粮、养殖有机大雁和绿色河蟹，使之成为名副其实的北国鱼米之乡。"
+        pic_url="http://www.baohengbio.com/images/show/welcome2.jpg"
+        link_url="http://www.baohengbio.com/"
         articles = [generate_article(title, desc, pic_url, link_url)]
      
       else

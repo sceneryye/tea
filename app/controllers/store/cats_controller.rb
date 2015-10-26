@@ -54,7 +54,7 @@ class Store::CatsController < ApplicationController
     	  	if order.present?
     	  		col, sorter = order.split("-")
           else
-            col, sorter =  %w{goods_id desc}
+            col, sorter =  %w{p_order asc}
     	  	end
               
              page  =  (params[:page] || 1).to_i

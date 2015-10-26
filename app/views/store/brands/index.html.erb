@@ -22,7 +22,7 @@
                                     <div class="member">
                                         <p>
                                         	<%=link_to brand_path(brand),:class=>"name #{brand.status}" do%>
-                                            <%=image_tag brand.brand_page.logo_url,:alt=>brand.brand_name,:class=>'img-responsive img-thumbnail img-circle'%>
+                                            <%=image_tag brand.brand_page.logo_url,:alt=>brand.brand_name,:class=>'img-responsive img-thumbnail img-circle' if brand.brand_page%>
                                         	<%end%>
                                         </p>
                                         <h3>
