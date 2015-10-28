@@ -32,7 +32,7 @@
         <div class="container">
             <div class="box first">
                  <div class="center">
-                    <h2>产品中心</h2>
+                    <h2 style="color:#000000">产品中心</h2>
                 </div>
             <ul class="portfolio-filter">
                 <li><a class="btn btn-primary active" href="#" data-filter="*">所有类别</a></li>
@@ -41,14 +41,14 @@
                 <%end if @categories%>
             </ul><!-- 
                 <div id="pricing-table" class="row"> -->
-                 <ul class="portfolio-items">
+                 <ul class="portfolio-items" style="text-align: center">
             <%@goods.each do |goods|%>
-                    <li class=" plan portfolio-item category<%=goods.cat.cat_id%>" style="margin-left:20px">
+                    <li class=" plan portfolio-item category<%=goods.cat.cat_id%>" >
 
                     <div class="item-inner" >
                     <!-- <div class="col-sm-4"> -->
                         
-                        <div class="plan-name"><%=goods.name%></div>
+                        <div class="plan-name" style="color:#000000"><%=goods.name%></div>
                            <div class="product-pic">
                                 <%=link_to good_path(goods.bn), :target=>"_blank" do %>
                                     <%=image_tag goods.list_default_pic,:alt=>goods.name%>
