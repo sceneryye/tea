@@ -2,7 +2,7 @@
         <div class="container">
             <div class="box first">
                 <div class="center">
-                    <h3><%=@good.name %></h3>
+                    <h3 "color:#000000"><%=@good.name %></h3>
                 </div>
                 <div class="gap"></div>
                 <div id="pricing-table" class="row">
@@ -18,7 +18,7 @@
                         <ul class="plan featured">
                             <li class="plan-price1 <%=@current_lv_3%>"> 钻石卡会员价：￥<span id="product_price"><%=@good.price*0.75 if @good.price%></span></li>
                             <li class="plan-price2 <%=@current_lv_2%>"> 贵宾卡会员价：￥<span id="product_price"><%=@good.price*0.9 if @good.price%></span></li>
-                            <li class="<%=@current_lv_1%>">会员价：￥<%=@good.default_product.price if @good.default_product%></span></li>                                          
+                            <li class="<%=@current_lv_1%>">体验价：￥<%=@good.default_product.price if @good.default_product%></span></li>                                          
                             
                             <li><%=render :partial=>"store/goods/product/new_spec",:locals=>{ :good=>@good }%></li>
                             <li><%=raw @good.desc%></li> 

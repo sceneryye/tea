@@ -63,9 +63,9 @@
                                 </div>
                             </div>  -->
 
-                            <div class="plan-price1">钻石卡会员价： &yen;<%=goods.price*0.75%></div>
-                            <div class="plan-price2">贵宾卡会员价： &yen;<%=goods.price*0.9%></div>
-                            <div style="color:#000000">零售价： &yen;<%=goods.price%></span></div>  
+                            <div class="plan-price1">钻石卡会员价： &yen;<%=(goods.price*0.75).round%></div>
+                            <div class="plan-price2">贵宾卡会员价： &yen;<%=(goods.price*0.9).round%></div>
+                            <div style="color:#000000">体验价： &yen;<%=goods.price%></span></div>  
                             <!-- <li>市场价： &yen;<span style="text-decoration:line-through;"><%=goods.mktprice%></span></li>      -->                       
                             <!-- <div class="plan-action">
                             <%=link_to "查看详情",good_path(goods.bn),:target=>"_blank",:class=>"btn btn-primary btn-lg"%>
