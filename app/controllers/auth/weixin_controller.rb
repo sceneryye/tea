@@ -89,10 +89,16 @@ class Auth::WeixinController < ApplicationController
 
 		else
 			sign_in(auth_ext.account,'1')
+			# return redirect_to "/member/new?return_url=#{redirect}"
 		    if return_url
 	          redirect = return_url
 	      	else
 		      redirect = after_user_sign_in_path
+		    end
+		    if @user
+		    	if @user.member_lv_id<2
+			    	redirect_to "/vip"
+			    end		    	
 		    end
 		    redirect_to redirect
 		end

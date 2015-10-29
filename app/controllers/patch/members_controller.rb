@@ -160,6 +160,9 @@ class Patch::MembersController < ApplicationController
   end
 
 	def advance
+    if @user.advance.to_i ==0
+        redirect_to '/vip?return_url=/cart' #'register?from=weixin&return_url=/cart'
+    end
 		@advances = @user.member_advances.paginate(:page=>params[:page],:per_page=>10)
 		add_breadcrumb("我的预存款")
 	end

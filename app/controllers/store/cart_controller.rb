@@ -27,6 +27,7 @@ class Store::CartController < ApplicationController
 
 	
 	def add
+     
     if @user.nil?
        return redirect_to  "/login"
     end
@@ -95,15 +96,10 @@ class Store::CartController < ApplicationController
 
 		#calculate cart_total and cart_total_quantity
 		find_cart!
-    if @user
-      if @user.mobile.nil?
-        redirect_to '/register?from=weixin&return_url=/cart'
-      else
-        redirect_to "/cart"
-      end
-    else
-      redirect_to  "/auto_login?id=1&platform=mobile&return_url=/cart"
-    end
+    
+    redirect_to "/cart"
+   
+   
 	#rescue
 		#render :text=>"add failed"
 	end

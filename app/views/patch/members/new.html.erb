@@ -12,7 +12,7 @@
                                     <label>充值卡类型:</label>
                                     <span>
                                         <%=f.radio_button :apply_type, 2%>
-                                        <label for="user_appy_type_2" class="radio-label">贵宾卡</label>
+                                        <label for="user_appy_type_2" class="radio-label" style="margin-right:10px;">贵宾卡</label>
                                         <%=f.radio_button :apply_type, 3%>
                                         <label for="user_appy_type_3" class="radio-label">钻石卡</label>
                                     </span>
@@ -23,21 +23,69 @@
                         <div class="row">
                             <div class="col-sm-11">
                                 <div class="form-group">
-                                    <%=f.text_field :name,:value=>"",:class=>"form-control",:placeholder=>"姓名",:required=>"required"%>
+                                    <%=f.text_field :name,:value=>"",:class=>"form-control",:placeholder=>"*姓名*",:required=>"required"%>
                                 </div>
                                 <div class="help-block" rel="user_name"></div>
                             </div>
+                            <!-- <div class="col-sm-1">
+                                <div class="help-block">*</div>
+                            </div> -->
+                        </div> 
+                        <div class="row">
+                             <div class="col-sm-11">
+                                <div class="form-group">
+                                    <%=f.text_field :id_card_number,:value=>"",:class=>"form-control",:placeholder=>"*身份证号*",:required=>"required"%>
+                                </div>
+                                <div class="help-block" rel="user_id_card_number"></div>
+                            </div><!-- 
                             <div class="col-sm-1">
                                 <div class="help-block">*</div>
+                            </div> -->
+                        </div>
+                        <div class="row">
+                             <div class="col-sm-11">
+                                <div class="form-group">
+                                    <%=f.text_field :mobile,:value=>"",:class=>"form-control",:placeholder=>"*手机*",:required=>"required"%>
+                                </div>
+                                <div class="help-block" rel="user_mobile"></div>
                             </div>
                         </div> 
+                        <div class="row">
+                            <div class="col-sm-3 form-group area"><%=f.hidden_field :area%>
+                                <%=f.select :province,Ecstore::Region.provinces.collect{|p| [p.local_name,p.region_id] },{:include_blank=>"*请选择省*" },{ :onchange=>"selectProvince(this,'#city','#district');",:id=>"province",:class=>"form-control" }%>
+                            </div>
+                            <div class="col-sm-3 form-group area">
+                              
+                                    <%=f.select :city, {}, { :include_blank=>"*请选择市*" }, { :onchange=>"selectCity(this,'#district');",:id=>"city",:class=>"form-control" }%>
+                            </div>
+                            <div class="col-sm-3 form-group area">
+                            
+                                    <%=f.select :district, {}, { :include_blank=>"*请选择区/县" }, { :onchange=>"selectDistrict(this);",:id=>"district",:class=>"form-control" }%>
+                            </div>
+                        </div>
+                        <div class="row">
+                             <div class="col-sm-11">
+                                <div class="form-group">
+                                    <%=f.text_field :addr,:value=>"",:class=>"form-control",:placeholder=>"*通信地址*",:required=>"required",:id=>"addr"%>
+                                </div>
+                                <div class="help-block" rel="user_addr"></div>
+                            </div>
+                        </div>                
+                        <div class="row">
+                             <div class="col-sm-11">
+                                <div class="form-group">
+                                    <%=f.text_field :email,:value=>"",:class=>"form-control",:placeholder=>"*邮箱*",:required=>"required"%>
+                                </div>
+                                <div class="help-block" rel="user_email"></div>
+                            </div>
+                        </div>                       
                         <div class="row">
                             <div class="col-sm-11">
                                 <div class="form-group">
                                     <label>性别:</label>
                                     <span>
                                         <%=f.radio_button :sex, 1%>
-                                        <label for="user_sex_1" class="radio-label">男</label>
+                                        <label for="user_sex_1" class="radio-label" style="margin-right:10px;">男</label>
                                         <%=f.radio_button :sex, 0%>
                                         <label for="user_sex_0" class="radio-label">女</label>
                                     </span>
@@ -62,38 +110,15 @@
                         <div class="row">
                             <div class="col-sm-11">
                                 <div class="form-group">
-                                    <div class="form-group">
                                     <%=f.text_field :qq,:value=>"",:class=>"form-control",:placeholder=>"QQ号码"%>
                                 </div>
                                 <div class="help-block" rel="user_id_card_number"></div>
                             </div>
                         </div> 
-                        <div class="row">
-                             <div class="col-sm-11">
-                                <div class="form-group">
-                                    <%=f.text_field :id_card_number,:value=>"",:class=>"form-control",:placeholder=>"身份证号",:required=>"required"%>
-                                </div>
-                                <div class="help-block" rel="user_id_card_number"></div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="help-block">*</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                             <div class="col-sm-11">
-                                <div class="form-group">
-                                    <%=f.text_field :mobile,:value=>"",:class=>"form-control",:placeholder=>"手机",:required=>"required"%>
-                                </div>
-                                <div class="help-block" rel="user_mobile"></div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="help-block">*</div>
-                            </div>
-                        </div> 
+                        
                         <div class="row">
                             <div class="col-sm-11">
                                 <div class="form-group">
-                                    <div class="form-group">
                                     <%=f.text_field :tel,:value=>"",:class=>"form-control",:placeholder=>"固定电话"%>
                                 </div>
                                 <div class="help-block" rel="user_id_card_number"></div>
@@ -106,47 +131,8 @@
                                 </div>
                                 <div class="help-block" rel="user_mobile"></div>
                             </div>
-                            <div class="col-sm-1">
-                                <div class="help-block">*</div>
-                            </div>
                         </div> 
-                        <div class="row">
-                            <div class="col-sm-3 form-group area"><%=f.hidden_field :area%>
-
-
-                                <%=f.select :province,Ecstore::Region.provinces.collect{|p| [p.local_name,p.region_id] },{:include_blank=>"请选择省" },{ :onchange=>"selectProvince(this,'#city','#district');",:id=>"province",:class=>"form-control" }%>
-                            </div>
-                            <div class="col-sm-3 form-group area">
-                              
-                                    <%=f.select :city, {}, { :include_blank=>"请选择市" }, { :onchange=>"selectCity(this,'#district');",:id=>"city",:class=>"form-control" }%>
-                            </div>
-                            <div class="col-sm-3 form-group area">
-                            
-                                    <%=f.select :district, {}, { :include_blank=>"请选择区/县" }, { :onchange=>"selectDistrict(this);",:id=>"district",:class=>"form-control" }%>
-                            </div>
-                        </div>
-                        <div class="row">
-                             <div class="col-sm-11">
-                                <div class="form-group">
-                                    <%=f.text_field :addr,:value=>"",:class=>"form-control",:placeholder=>"通信地址",:required=>"required",:id=>"addr"%>
-                                </div>
-                                <div class="help-block" rel="user_addr"></div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="help-block">*</div>
-                            </div>
-                        </div>                
-                        <div class="row">
-                             <div class="col-sm-11">
-                                <div class="form-group">
-                                    <%=f.text_field :email,:value=>"",:class=>"form-control",:placeholder=>"邮箱",:required=>"required"%>
-                                </div>
-                                <div class="help-block" rel="user_email"></div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="help-block">*</div>
-                            </div>
-                        </div>                       
+                        
                     
                         <div class="row">
                             <div class="col-sm-12">                 
@@ -161,7 +147,7 @@
                             <div class="col-sm-12">                                    
                                 <div class="form-group">
                                      <%=f.submit "提 交",:class=>"btn btn-success btn-lg"%>
-                                     <%=link_to "返 回","#",:class=>"btn btn-success btn-lg"%>            
+                                     <%=link_to "返 回","/",:class=>"btn btn-success btn-lg", :style=>'color:white'%>            
                                 </div>
                             </div>
                         </div>
