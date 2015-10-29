@@ -3,7 +3,8 @@ class Ecstore::Payment < Ecstore::Base
 	self.table_name = 'sdb_ectools_payments'
 	self.accessible_all_columns
 
-	has_one :pay_bill,:foreign_key=>"bill_id",:class_name=>"Bill",:conditions=>{:pay_object=>"order",:bill_type=>"payments"}
+	#has_one :pay_bill,:foreign_key=>"bill_id",:class_name=>"Bill",:conditions=>{:pay_object=>"order",:bill_type=>"payments"}
+	has_one :pay_bill,:foreign_key=>"bill_id",:class_name=>"Bill"
 
 	belongs_to :user,:foreign_key=>"member_id"
 

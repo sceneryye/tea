@@ -131,7 +131,7 @@ module ModecPay
           <span style="color: #0abede">正在跳转到到微信支付...<br/>如果长时间没有反应，请</span>
         </h2>
       </div>
-       <!-- <form accept-charset="#{self.charset}" action="/vshop/78/payments?id=#{self.pay_id}" method="post" id="pay_form"> //-->
+       <!-- <form accept-charset="#{self.charset}" action="payments?id=#{self.pay_id}" method="post" id="pay_form"> //-->
         <form accept-charset="#{self.charset}" action="/payments?id=#{self.pay_id}" method="post" id="pay_form">
           #{form_inputs}
 
@@ -175,10 +175,11 @@ module ModecPay
 
 
                   if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                    window.location ="/vshop/78/paynotifyurl?temp=solution&payment_id=#{self.fields['out_trade_no']}";
+                   window.location ="/payments/notify?temp=solution&payment_id=#{self.fields['out_trade_no']}";
                   }
                     else{alert('支付未成功');
                   //  window.location ="/orders/mobile_show?id=20141003100859&supplier_id=97";
+                   //window.location ="/payments/notify?payment_id=20141003100859&supplier_id=1";
                   }
               });
 

@@ -9,9 +9,72 @@ class Patch::MembersController < ApplicationController
 
 	before_filter do
 		clear_breadcrumbs
-		add_breadcrumb("我的佐康原生态食品",:member_path)
+		add_breadcrumb("我的佐康",:member_path)
 	end
 
+  def new
+  end
+
+  def create
+     # params[:ecstore_user].merge!(:bank_info=>params[:bank_info].to_s) if params[:bank_info]
+
+      #params[:ecstore_user].merge!(params[:date]) if params[:date]
+      
+    if @user.update_attributes(params[:user])
+
+#        sql = "insert mdk.sdb_b2c_orders (order_id,total_amount,final_amount,createtime,last_modified,payment,member_id)
+# values(20151023135386,10000,10000,1445578550,1445578550,'wxpay');"
+#        results = ActiveRecord::Base.connection.execute(sql)
+
+        #删除购物车/加入购物车买卡/生成订单/显示支付方式
+
+         # redirect_to profile_path(:tab=>params[:tab]), :notice=>"保存成功."
+
+      rel_id = "#{Time.now.strftime('%Y%m%d%H%M%S')}"
+      installment =  1
+      part_pay =  0
+
+      pay_app_id = 'wxpay'    
+      pay_amount = 10000
+      currency = 'CNY'
+
+    
+    # params[:payment].merge! Ecstore::Payment::PAYMENTS[pay_app_id.to_sym]
+
+    @payment = Ecstore::Payment.new  do |payment|     
+      payment.payment_id = Ecstore::Payment.generate_payment_id
+      payment.memo = "会员卡购买"
+      payment.pay_app_id = pay_app_id
+      payment.status = 'ready'
+      payment.pay_ver = '1.0'
+      payment.paycost = 0
+
+      payment.account = 'baohengboi | 佐康自然生态食品'
+      payment.member_id = payment.op_id = @user.member_id
+      payment.pay_account = @user.login_name
+      payment.ip = request.remote_ip
+
+      payment.t_begin = payment.t_confirm = Time.now.to_i
+      
+      payment.pay_bill = Ecstore::Bill.new do |bill|
+        bill.rel_id  = rel_id
+        bill.bill_type = "refunds"
+        bill.pay_object  = "prepaid_recharge"
+        bill.money = pay_amount
+      end
+    end
+
+    @payment.money = @payment.cur_money = pay_amount
+    if @payment.save     
+        redirect_to "/payments/pay?id=#{@payment.payment_id}"  #pay_payment_path(@payment.payment_id)
+    else
+      redirect_to "/member/new"
+    end
+      
+    else
+          render "/member/new"
+    end
+  end
 
 	def show
 		@orders = @user.orders.limit(5)
