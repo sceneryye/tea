@@ -16,14 +16,14 @@
               </div>
               <div class="prices">
                 <span>
-                  会员价: 
+                  贵宾会员价: 
                   <%if signed_in?%>
-                    &yen;<%=good.price%>
+                    &yen;<%=(goods.price*0.9).round%>
                   <%else%>
-                    <a href="javascript:void(0)" class="login">[会员专享]</a>
+                    <a href="javascript:void(0)" class="login">体验价</a>
                   <%end%>
                 </span>
-                <span class="mtkprice">市场价: &yen;<%=good.mktprice%></span>
+                <span class="mtkprice">体验价: &yen;<%=good.price%></span>
               </div>
 
             </div>

@@ -105,7 +105,7 @@
                     	<div class="item-inner" >
                     	<!-- <div class="col-sm-4"> -->
                         
-                        <div class="plan-name"><%=goods.name%></div>
+                        <div class="plan-name" style="color:#000000"><%=goods.name%></div>
                            <div class="product-pic">
                                 <%=link_to good_path(goods.bn), :target=>"_blank" do %>
                                     <%=image_tag goods.list_default_pic,:alt=>goods.name%>
@@ -120,9 +120,9 @@
                                 </div>
                             </div>  -->
 
-                            <div class="plan-price1">钻石卡会员价： &yen;<%=goods.price*0.75%></div>
-                            <div class="plan-price2">贵宾卡会员价： &yen;<%=goods.price*0.9%></div>
-                            <div>零售价： &yen;<%=goods.price%></span></div>  
+                            <div class="plan-price1">钻石卡会员价： &yen;<%=(goods.price*0.75).round%></div>
+                            <div class="plan-price2">贵宾卡会员价： &yen;<%=(goods.price*0.9).round%></div>
+                            <div>体验价： &yen;<%=goods.price%></span></div>  
                             <!-- <li>市场价： &yen;<span style="text-decoration:line-through;"><%=goods.mktprice%></span></li>      -->                       
                             <!-- <div class="plan-action">
                             <%=link_to "查看详情",good_path(goods.bn),:target=>"_blank",:class=>"btn btn-primary btn-lg"%>
