@@ -10,7 +10,7 @@ class Ecstore::Member < Ecstore::Base
 	belongs_to :user,:foreign_key=>"member_id"
 	has_many :members_case,:foreign_key=>"member_id"
 
-
+	 attr_accessible :email, :mobile, :member_lv_id, :advance, :card_num, :id_card_number, :addr, :point
 	def reg_time
 		return #Time.at(self.regtime).strftime("%Y-%m-%d %H:%M:%S")
 	end
@@ -159,15 +159,15 @@ class Ecstore::Member < Ecstore::Base
 	      			content.push member.user.places
 	      		end
 	      	end
-	      	if(fields.include?("24-height-身高"))
-	      		if member.user.height.nil?
+	      	if(fields.include?("24-id_card_number-身份证"))
+	      		if member.user.id_card_number.nil?
 	      			content.push "" 
 	      		else
-	      			content.push member.user.height
+	      			content.push member.user.id_card_number
 	      		end
 	      	end
-	      	if(fields.include?("25-shoesize-鞋码"))
-	      		if member.user.shoesize.nil?
+	      	if(fields.include?("25-advance-预存款"))
+	      		if member.user.advance.nil?
 	      			content.push "" 
 	      		else
 	      			content.push member.user.shoesize
@@ -201,11 +201,11 @@ class Ecstore::Member < Ecstore::Base
 	      			content.push member.sms_validate_name
 	      		end
 	      	end
-          if(fields.include?("30-discount_code-特惠码"))
-            if member.discount_code.nil?
+          if(fields.include?("30-card_num-会员卡"))
+            if member.card_num.nil?
               content.push ""
             else
-              content.push member.discount_code
+              content.push member.card_num
             end
           end
 

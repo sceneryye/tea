@@ -59,14 +59,14 @@
   - 常出席的场合
   - user.places
   - "false"
-24-height-身高: 
-  - 身高
-  - user.height
-  - "false"
-25-shoesize-鞋码: 
-  - 鞋码
-  - user.shoesize
-  - "false"
+24-id_card_number-身份证: 
+  - 身份证
+  - user.id_card_number
+  - "true"
+25-advance-预存款: 
+  - 预存款
+  - user.advance
+  - "true"
 26-interests-兴趣爱好: 
   - 兴趣爱好
   - user.interests
@@ -94,12 +94,12 @@
 7-point-积分: 
   - 积分
   - point
-  - "false"
+  - "true"
 9-sex-性别: 
   - 性别
   - sex_name
   - "true"
-30-discount_code-特惠码: 
-  - 特惠码
-  - user.discount_code
+30-card_num-会员卡号: 
+  - 会员卡号
+  - user.card_num
   - "true"

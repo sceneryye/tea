@@ -4,11 +4,18 @@ function isWeixinBrowser(){
     var ua = navigator.userAgent.toLowerCase();
     return (/micromessenger/.test(ua)) ? true : false ;
 }
-<% return_url={:return_url => request.url.sub('http://trade','').force_encoding('UTF-8')}.to_query%>
+
+
+<% return_url={:return_url => request.url.sub('http://trade','').sub('?from=weixin_menu','').force_encoding('UTF-8')}.to_query%>
 var iswxb= isWeixinBrowser();
 
  if ('<%=@user.nil?%>'==='true' && isWeixinBrowser() ){
         location.href = "/auto_login?id=1&<%=return_url%>";
+ }
+
+ var  is_pop_register_vip = <%=(params[:from]=='weixin_menu' && @user.member_lv_id==1)%>
+ if(is_pop_register_vip){
+     location.href = "/vip?<%=return_url%>";
  }
 </script>
 <!DOCTYPE html>

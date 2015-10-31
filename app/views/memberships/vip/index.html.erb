@@ -6,110 +6,91 @@
 <%end%>
 
 <section id="products" class="pricing">
-    <div class="container">
-      <br><br>
-        <div class="box">
-           
-            <section class="pricing" id="membership">
   <div class="container">
-    <div class="box">
-      <div class="center">
-        <h2>
-          会员专享</h2>
-        <p class="lead">
-          Members enjoy Preferential<br />
-          会员消费卡尊享优惠</p>
-        <p>
-          &nbsp;</p>
-      </div>
-      <!--/.center-->
-      <div class="row" id="pricing-table">
-        <div class="col-sm-4">
-          <ul class="plan">
-            <li class="plan-price">
-              贵宾卡会员</li>
-            <li>
-              预存：￥2000元</li>
-            <li class="plan-name">
-              折扣：9折</li>
-            <li>
-              积分：正常积分</li>
-            <li class="plan-action">
-              <%if signed_in?%>                
-                <!-- <a class="btn btn-primary btn-lg" href="/card/purchase?level=you">立刻申请</a> -->
-                 <a class="btn btn-primary btn-lg" href="/member/new?type=2&return_url=<%=params[:return_url]%>">立刻申请</a>
-              <%else%>
-                <a class="btn btn-primary btn-lg" href="/login?return_url=%2fvip">立刻申请</a>
-              <%end%>
-            </li>
-          </ul>
+    <div class="box">           
+      <section class="pricing" id="membership">
+        <div class="container">
+          <div class="box">
+            <div class="center">
+              <h2>
+                会员专享</h2>
+              <p class="lead">
+                Members enjoy Preferential<br />
+                会员消费卡尊享优惠</p>
+              <p>
+                &nbsp;</p>
+            </div>
+            <!--/.center-->
+            <div class="row" id="pricing-table">
+              <div class="col-sm-4">
+                <ul class="plan featured">
+                  
+                  <li>享有特惠折扣（9折～7.5折）</li>
+                  <li>不定期的赠送精美礼品</li>
+                  <li>固定客服高效率服务</li>
+                  <li>免费送货到家</li>
+                  <li>一年一次黑龙江基地度假旅游</li>
+                  <li>不定期举办商业信息互动活动</li>
+                  <li>佳节爱心礼品</li>
+                  <!-- <li class="plan-price">会员尊享待遇</li> -->
+                </ul>
+              </div>
+              <!--/.col-sm-4-->
+              <div class="col-sm-4">
+                <ul class="plan">
+                  <li class="plan-price">
+                    钻石卡会员</li>
+                  <li>
+                    预存：￥10000元</li>
+                  <li class="plan-name">
+                    折扣：7.5折</li>
+                  <li>
+                    积分：正常积分</li>
+                  <li class="plan-action">
+                    <%if signed_in?%>                
+                      <!-- <a class="btn btn-primary btn-lg" href="/card/purchase?level=you">立刻申请</a> -->
+                      <a class="btn btn-primary btn-lg" href="/member/new?type=3&return_url=<%=params[:return_url]%>">立刻申请</a>
+                    <%else%>
+                      <a class="btn btn-primary btn-lg" href="/login?return_url=%2fvip">立刻申请</a>
+                    <%end%>                    
+                    <a class="btn btn-primary btn-lg" href="<%=@return_url%>">以后再说</a>
+                  </li>
+                </ul>
+              </div>
+              <!--/.col-sm-4-->
+              <div class="col-sm-4">
+                <ul class="plan">
+                  <li class="plan-price">
+                    贵宾卡会员</li>
+                  <li>
+                    预存：￥2000元</li>
+                  <li class="plan-name">
+                    折扣：9折</li>
+                  <li>
+                    积分：正常积分</li>
+                  <li class="plan-action">
+                    <%if signed_in?%>                
+                      <!-- <a class="btn btn-primary btn-lg" href="/card/purchase?level=you">立刻申请</a> -->
+                       <a class="btn btn-primary btn-lg" href="/member/new?type=2&return_url=<%=params[:return_url]%>">立刻申请</a>
+                    <%else%>
+                      <a class="btn btn-primary btn-lg" href="/login?return_url=%2fvip">立刻申请</a>
+                    <%end%>
+
+                    <a class="btn btn-primary btn-lg" href="<%=@return_url%>">以后再说</a>
+                  </li>
+                </ul>
+              </div>
+              <!--/.col-sm-4-->
+             
+              
+            </div>
+          </div>
         </div>
-        <!--/.col-sm-3-->
-        <div class="col-sm-4">
-          <ul class="plan featured">
-            <li class="plan-price">
-              会员尊享待遇</li>
-            <li>
-              享有特惠折扣（9折～7.5折）</li>
-            <li>
-              不定期的赠送精美礼品</li>
-            <li>
-              固定客服高效率服务</li>
-            <li>
-              免费送货到家</li>
-            <li>
-              一年一次黑龙江基地度假旅游</li>
-            <li>
-              不定期举办商业信息互动活动</li>
-            <li>
-              佳节爱心礼品</li>
-          </ul>
-        </div>
-        <!--/.col-sm-3-->
-        <div class="col-sm-4">
-          <ul class="plan">
-            <li class="plan-price">
-              钻石卡会员</li>
-            <li>
-              预存：￥10000元</li>
-            <li class="plan-name">
-              折扣：7.5折</li>
-            <li>
-              积分：正常积分</li>
-            <li class="plan-action">
-              <%if signed_in?%>                
-                <!-- <a class="btn btn-primary btn-lg" href="/card/purchase?level=you">立刻申请</a> -->
-                <a class="btn btn-primary btn-lg" href="/member/new?type=3&return_url=<%=params[:return_url]%>">立刻申请</a>
-              <%else%>
-                <a class="btn btn-primary btn-lg" href="/login?return_url=%2fvip">立刻申请</a>
-              <%end%>
-            </li>
-          </ul>
-        </div>
-        <!--/.col-sm-3--></div>
+      </section>
+      <!--/#membership-->
     </div>
   </div>
 </section>
-<!--/#membership-->
 
-
-<table width="950" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#dbdbdb">
-  <tr>
-    <td align="left" valign="top" style="background:#FFF; height:623px;">
-
-
-    
-    <div id="a" style="width:100%; background:url(/assets/memberships/tabbg.gif) repeat-x top; padding-bottom:50px;">
-      <table border="0" cellspacing="0" cellpadding="0" style="margin-left:50px;">
-        <tr>
-          <td><a name="a" href="#a" onclick="document.getElementById('a').style.display='';document.getElementById('b').style.display='none';"><img src="/assets/memberships/tab1h.gif" width="148" height="100" border="0" /></a></td>
-          <td><img src="/assets/memberships/tabm.gif" width="26" height="100" /></td>
-          <td><a name="b" href="#b" onclick="document.getElementById('a').style.display='none';document.getElementById('b').style.display='';"><img src="/assets/memberships/tab2.gif" width="120" height="100" border="0" /></a></td>
-        </tr>
-      </table>
-      <div  style="font-size:16px;  font-family:'最象素', '微软雅黑';  margin-left:70px; margin-top:40px; width:680px; ">仅需支付VIP卡充值额，即可享受等同于充值额的商品及以下超值VIP卡权益
-      </div>
-
-    </div>
     
      

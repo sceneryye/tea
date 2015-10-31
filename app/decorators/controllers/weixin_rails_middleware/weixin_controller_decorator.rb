@@ -52,36 +52,12 @@ WeixinRailsMiddleware::WeixinController.class_eval do
         link_url="http://www.baohengbio.com/mproducts?id=a0771043&from=weixin&wechatuser=#{user}&supplier_id=#{id}"
         articles = [generate_article(title, desc, pic_url, link_url)]
 
-      when '测试'
-        title="[测试商品]-----------------"
-        desc ="测试商品0.01元，佣金3.00元"
-        pic_url="http://www.baohengbio.com/images/a072/a0729002_b_1.jpg"
-        link_url="http://www.baohengbio.com/mproducts?id=a980000&fp=mproducts&supplier_id=#{id}&from=weixin&wechatuser=#{user}"
-        articles = [generate_article(title, desc, pic_url, link_url)]
-
-      when 'share'
-        share = 0
-        @order = Ecstore::Order.where(:recommend_user=>@weixin_message.FromUserName,:pay_status=>'1').select("sum(commission) as share").group(:recommend_user).first
-        if @order
-          share =@order.share.round(2)
-        end
-
-        title="您的总佣金收益是: #{share}元"
-        desc ="查看佣金详情请点击"
-        pic_url='http://www.trade-v.com/assets/vshop/commission_banner.jpg'
-        link_url="http://www.baohengbio.com/share?FromUserName=#{user}&supplier_id=#{id}"
-
-        title1="如何轻松赚佣金"
-        desc1 =""
-        pic_url1="https://mmbiz.qlogo.cn/mmbiz/oMwR6HEEzCy0xJicVicrfc9sEyMlj1M8ytz5UsZFiaF3H28CMq2g0nyiaRyJibjcJic3iaVypnia6vCXKicCQnz3QOGyITA/0"
-        link_url1="http://mp.weixin.qq.com/s?__biz=MzA5OTM5ODIzMQ==&mid=203023353&idx=1&sn=f9cf0b0b53d70ec67126a6ab93a7ed9a#rd"
-
-        articles = [generate_article(title, desc, pic_url, link_url),generate_article(title1, desc1, pic_url1, link_url1)]
+     
       when 'subscribe'
         title="您好！佐康原生态食品欢迎您！"
         desc ="鲶鱼沟人，用智慧和生命力，在这片土地上完成了伟大的孕育。在碱性环境里培植优质营养的碱地大米、五谷杂粮、养殖有机大雁和绿色河蟹，使之成为名副其实的北国鱼米之乡。"
         pic_url="http://www.baohengbio.com/images/show/welcome2.jpg"
-        link_url="http://www.baohengbio.com/"
+        link_url="http://www.baohengbio.com/?from=weixin_menu"
         articles = [generate_article(title, desc, pic_url, link_url)]
      
       else

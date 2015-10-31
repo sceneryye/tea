@@ -32,15 +32,17 @@ module Admin
 
       def updateInfo
         @member = Ecstore::Member.find(params[:id])
-        @member.mobile = params[:ecstore_member][:mobile]
-        @member.email = params[:ecstore_member][:email]
-        @member.member_lv_id = params[:ecstore_member][:member_lv_id]
+        @member.update_attributes(params[:ecstore_member])
+        
+        # @member.mobile = params[:ecstore_member][:mobile]
+        # @member.email = params[:ecstore_member][:email]
+        # @member.member_lv_id = params[:ecstore_member][:member_lv_id]
         if @member.advance != params[:ecstore_member][:advance].to_i
           @adv_log ||= Logger.new('log/adv.log')
           @adv_log.info("member id: "+@member.member_id.to_s+"--advance:"+@member.advance.to_s+"=>"+params[:ecstore_member][:advance])
-          @member.advance = params[:ecstore_member][:advance]
+          # @member.advance = params[:ecstore_member][:advance]
         end
-        @member.save
+        # @member.save
         redirect_to admin_members_path
       end
 
