@@ -12,11 +12,12 @@ var iswxb= isWeixinBrowser();
  if ('<%=@user.nil?%>'==='true' && isWeixinBrowser() ){
         location.href = "/auto_login?id=1&<%=return_url%>";
  }
-
+<%if @user%>
  var  is_pop_register_vip = <%=(params[:from]=='weixin_menu' && @user.member_lv_id==1)%>
  if(is_pop_register_vip){
      location.href = "/vip?<%=return_url%>";
  }
+ <%end%>
 </script>
 <!DOCTYPE html>
 <html lang="zh-cn">
