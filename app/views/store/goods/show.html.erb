@@ -16,8 +16,8 @@
 				    <%=f.hidden_field :type_id,:value=>@good.type_id%>                    
                     <div class="col-sm-4">
                         <ul class="plan featured">
-                            <li class="plan-price1 <%=@current_lv_3%>"> 钻石卡会员价：￥<span id="product_price"><%=@good.price*0.75 if @good.price%></span></li>
-                            <li class="plan-price2 <%=@current_lv_2%>"> 贵宾卡会员价：￥<span id="product_price"><%=@good.price*0.9 if @good.price%></span></li>
+                            <li class="plan-price1 <%=@current_lv_3%>"> 钻石卡会员价：￥<span id="product_price"><%=(@good.price*0.75).round if (@good.price).round%></span></li>
+                            <li class="plan-price2 <%=@current_lv_2%>"> 贵宾卡会员价：￥<span id="product_price"><%=(@good.price*0.9).round if (@good.price).round%></span></li>
                             <li class="<%=@current_lv_1%>">体验价：￥<%=@good.default_product.price if @good.default_product%></span></li>                                          
                             
                             <li><%=render :partial=>"store/goods/product/new_spec",:locals=>{ :good=>@good }%></li>
