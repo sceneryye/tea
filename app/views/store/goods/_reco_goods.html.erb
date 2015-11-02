@@ -2,9 +2,9 @@
 <div id="reco_goods">
         <h3>推荐商品</h3>
 
-        <ul class="portfolio-items">
+        <ul class="portfolio-items" style="width:98%">
           <%@recommend_goods.each do |good|%>
-          <li class="item-inner" style="margin-left:20px">
+          <li class="item-inner" style="margin-left:20px;">
             <div class="product-pic">
                 <%=link_to good_path(good.bn,:tag=>@tag&&@tag.tag_name) do %>
                     <%=image_tag good.rec_image,:style=>"width:98%",:alt=>good.name%>
