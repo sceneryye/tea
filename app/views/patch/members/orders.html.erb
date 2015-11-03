@@ -33,7 +33,7 @@
 				</div>
 				
 				<div class="col-sm-2"><%=order.created_at%></div>
-				<div class="col-sm-2">&yen;<%=order.final_amount.to_i%></div>
+				<div class="col-sm-2">&yen;<%=order.final_amount.round%></div>
 				<div class="col-sm-1"><%=order.status_text%></div>
 				<div class="col-sm-2">
 					<div><%=link_to "查看",detail_order_path(order),:target=>"_blank"%></div>
