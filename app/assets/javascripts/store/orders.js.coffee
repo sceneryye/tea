@@ -25,7 +25,7 @@ $ ->
     part_amount = 0.0
     part_amount =  parseFloat $("#advance").data("amount") if $("#advance").attr("checked") == "checked"
 
-    pay_amount = order_amount - coupon_amount - pmt_amount
+    pay_amount = coupon_amount + pmt_amount - order_amount  
     $("#final_amount").text(pay_amount)
 
     bcom_discount = 1.0
@@ -34,7 +34,7 @@ $ ->
       bcom_discount_amount = pay_amount -pay_amount*bcom_discount
       $("#bcom_discount").text(-bcom_discount_amount)
 
-    pay_amount = pay_amount * bcom_discount - part_amount
+    pay_amount =part_amount -  pay_amount * bcom_discount 
     $("#pay_amount").text(pay_amount)
 
   window.compute_payment2 = ->
@@ -135,7 +135,7 @@ $ ->
 
   $("#advance").change ->
     if $(this).attr("checked") == 'checked'
-      $("#part_amount").text "-"+$("#advance").data("amount")
+     $("#advance").data("amount") "-"+$("#part_amount").text
     else
       $("#part_amount").text '-0'
 

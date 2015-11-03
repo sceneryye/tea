@@ -48,7 +48,7 @@
            <div class="row">
               <div class="col-sm-8">                                    
                   <div class="form-group" style="color:white">
-                       <span>总金额 : </span><span class="total">￥<%= format('%.2f',@cart_total)%></span>
+                       <span>总金额 : </span><span class="total">￥<%= (@cart_total).round%></span>
 
                   </div>
               </div>

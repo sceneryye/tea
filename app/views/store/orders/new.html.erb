@@ -184,7 +184,10 @@
 				<div class="item">
 					<span class="text">订单总金额：</span>
 					<span class="rmb-symbol">￥</span>
-					<span class="money" id="final_amount"></span>
+						<span class="money" data-amount="<%=@cart_total%>" id="cart_amount">
+						<%=@cart_total.round%> 
+					</span>
+					<!--<span class="money" id="final_amount"></span>-->
 				</div>
 
 			</div>
@@ -192,11 +195,12 @@
 				
 				<%unless @user.advance == 0%>
 				<div class="item">
-					<span class="text">预付金额：</span>
+					<span class="text">预付款金额：</span>
 					<span class="rmb-symbol">￥</span>
-					<span class="money part" id="part_amount">
-						-<%=@user.advance < @cart_total && @user.advance>0 ? @user.advance : 0%>
-					</span>
+					<!--<span class="money part" id="part_amount">
+						 -<%=@user.advance < @cart_total && @user.advance>0 ? @user.advance : 0%>
+					</span>-->
+						<span class="money final" id="pay_amount"></span>
 				</div>
 				<%end%>
 				
@@ -204,7 +208,8 @@
 				<div class="item">
 					<span class="text">支付金额：</span>
 					<span class="rmb-symbol">￥</span>
-					<span class="money final" id="pay_amount"></span>
+					<span class="money final"  data-amount="<%=@cart_total%>" id="cart_amount">-<%=@cart_total.round%> </span>
+					<!--	<span class="money final" id="pay_amount"></span>-->
 				</div>
 
 			</div>
