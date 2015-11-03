@@ -32,20 +32,23 @@ class Store::OrdersController < ApplicationController
       @order.commission=0
     end
     #debug_line_item =''
+
+
+    discount =  @order.user.member_lv.dis_count 
+
     @line_items.each do |line_item|
       product = line_item.product
       good = line_item.good
 
-      #     if product || good
+
+      
       @order.order_items << Ecstore::OrderItem.new do |order_item|
         order_item.product_id = product.product_id
         order_item.bn = product.bn
         order_item.name = product.name
-        if cookies[:MLV] == "10"
-          order_item.price = product.bulk
-        else
-          order_item.price = product.price
-        end
+        
+        #会员优惠价格四舍五入
+        order_item.price = (product.price * discount).round
         order_item.goods_id = good.goods_id
         order_item.type_id = good.type_id
         order_item.nums = line_item.quantity.to_i

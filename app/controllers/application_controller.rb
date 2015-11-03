@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
         end
         @cart_total_quantity = @line_items.inject(0){ |t,l| t+=l.quantity }.to_i || 0
        
-        @cart_total = @line_items.select{|x| x.product.present? }.collect{ |x| (x.product.price*x.quantity*discount) }.inject(:+) || 0
+        @cart_total = @line_items.select{|x| x.product.present? }.collect{ |x| (x.product.price*x.quantity*discount).round }.inject(:+) || 0
       
        #@pmtable = @line_items.select { |line_item| line_item.good.is_suit? }.size == 0
 

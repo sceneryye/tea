@@ -59,13 +59,7 @@
 	</div>
 
 	<div class="section payment" id="payments">
-		<h5>支付方式</h5>
-      <% if cookies[:MLV] == "10" %>
-          <label class="radio">
-            <%=f.radio_button :payment, "term"%> <b>账期（与供应商协商）</b>
-         </label>
-          <br/>
-      <%end%>
+		<h5>支付方式</h5>    
 			
 		<%if @user.advance>0 && @user.advance < @cart_total%>
 	 	<label class="checkbox">

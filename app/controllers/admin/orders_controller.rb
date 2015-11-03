@@ -32,31 +32,31 @@ class Admin::OrdersController < Admin::BaseController
 
 		if !params[:ship_status].nil?
 			@orders_nw = @orders_nw.where(:ship_status=>params[:ship_status])
-    end
+    	end
 
 		@order_ids = @orders_nw.pluck(:order_id)
-    role=current_admin.login_name.split( "_")[0]
-    if (role=="sale")
-      @orders = @orders_nw.where(:desktop_user_id=>current_admin.account_id)
+	    role=current_admin.login_name.split( "_")[0]
+	    if (role=="sale")
+	      @orders = @orders_nw.where(:desktop_user_id=>current_admin.account_id)
 
-    elsif (role=="vendor")
-      vendor={'vendor_0001'=>66, 'vendor_0002'=>65,'vendor_ybpx'=>72,'vendor_xss'=>73,'vendor_xgy'=>63,'vendor_xj'=>64}
-     # @orders = @orders_nw.joins(:order_items).where('sdb_b2c_order_items.goods_id in (3466,3467)')
-        @orders = @orders_nw.joins(:order_items)
-        .where("sdb_b2c_order_items.goods_id in (select goods_id from sdb_b2c_goods where supplier=#{vendor[current_admin.login_name]})")
+	    elsif (role=="vendor")
+	      vendor={'vendor_0001'=>66, 'vendor_0002'=>65,'vendor_ybpx'=>72,'vendor_xss'=>73,'vendor_xgy'=>63,'vendor_xj'=>64}
+	     # @orders = @orders_nw.joins(:order_items).where('sdb_b2c_order_items.goods_id in (3466,3467)')
+	        @orders = @orders_nw.joins(:order_items)
+	        .where("sdb_b2c_order_items.goods_id in (select goods_id from sdb_b2c_goods where supplier=#{vendor[current_admin.login_name]})")
 
-     elsif (current_admin.account_type=='shopadmin')#login_name=="admin")
-      @orders = @orders_nw
-  else
-  	  @orders = @orders_nw.where(:member_id=>"0")
-  end
-    @orders = @orders.includes(:user).paginate(:page=>params[:page],:per_page=>30)
+	     elsif (current_admin.account_type=='shopadmin')#login_name=="admin")
+	      	@orders = @orders_nw
+		else
+		 	@orders = @orders_nw.where(:member_id=>"0")
+		end
+    	@orders = @orders.includes(:user).paginate(:page=>params[:page],:per_page=>30)
 		respond_to do |format|
 			format.js
 			format.html
 		end
 	end
-
+=begin
 	# def export
 	# 	pp "---------------"
 	# 	if params[:member][:select_all] == "1"
@@ -92,6 +92,7 @@ class Admin::OrdersController < Admin::BaseController
 	#       csv << content
 	#   	end
 	# end
+=end
 
 	def search
 		if params[:s] && params[:s][:q].present?
@@ -213,7 +214,7 @@ class Admin::OrdersController < Admin::BaseController
 			payment.pay_ver = '1.0'
 			payment.paycost = 0
 
-			payment.account = 'trade-V 跨境贸易直通车'
+			payment.account = '佐康原生态食品'
 			payment.member_id = payment.op_id = @user.member_id
 			payment.pay_account = @user.login_name
 			payment.ip = request.remote_ip
@@ -254,7 +255,6 @@ class Admin::OrdersController < Admin::BaseController
 
 	def delivery
 
-
 		@order = Ecstore::Order.find_by_order_id(params[:id])
 		@delivery = Ecstore::Delivery.new do |delivery|
 			delivery.ship_name = @order.ship_name
@@ -279,7 +279,7 @@ class Admin::OrdersController < Admin::BaseController
 		if @delivery.save
 			begin
 				tel  =@delivery.ship_mobile
-				text = "您的订单#{@order.order_id}已发货,使用#{@delivery.logi_name},单号为#{@delivery.logi_no}.请注意查收! [TRADE-V]"
+				text = "您的订单#{@order.order_id}已发货,使用#{@delivery.logi_name},单号为#{@delivery.logi_no}.请注意查收! [佐康]"
 				Sms.send(tel,text)
 			rescue Exception => e
 			end
