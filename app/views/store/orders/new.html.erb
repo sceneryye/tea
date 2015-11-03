@@ -118,11 +118,11 @@
 				</td>
 				<td>
                  
-                      <%=number_to_currency line_item.product.price*@user.member_lv.dis_count,:unit=>"&yen;",:precision=>2%>
+                      <%=number_to_currency line_item.product.price*@user.member_lv.dis_count,:unit=>"&yen;",:precision=>0%>
                 </td>
 				<td><%=line_item.quantity%></td>
 				<td>
-                      <%=number_to_currency line_item.line_total*@user.member_lv.dis_count,:unit=>"&yen;",:precision=>2%>
+                      <%=number_to_currency line_item.line_total*@user.member_lv.dis_count,:unit=>"&yen;",:precision=>0%>
 				</td>
 				</tr>
 			<%end%>
@@ -173,7 +173,7 @@
 					<span class="text">商品总额：</span>
 					<span class="rmb-symbol">￥</span>
 					<span class="money" data-amount="<%=@cart_total%>" id="cart_amount">
-						<%=@cart_total%> 
+						<%=@cart_total.round%> 
 					</span>
 				</div>
 				
