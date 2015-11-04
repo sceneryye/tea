@@ -5,15 +5,11 @@
   <%= stylesheet_link_tag "memberships/vip" %>
 <%end%>
 
-<section id="products" class="pricing">
-  <div class="container">
-    <div class="box">           
       <section class="pricing" id="membership">
         <div class="container">
           <div class="box">
             <div class="center">
-              <h2>
-                会员专享</h2>
+              <h1>会员专享</h1>
               <p class="lead">
                 Members enjoy Preferential<br />
                 会员消费卡尊享优惠</p>
@@ -48,12 +44,12 @@
                     积分：正常积分</li>
                   <li class="plan-action">
                     <%if signed_in?%>                
-                      <!-- <a class="btn btn-primary btn-lg" href="/card/purchase?level=you">立刻申请</a> -->
-                      <a class="btn btn-primary btn-lg" href="/member/new?type=3&return_url=<%=params[:return_url]%>">立刻申请</a>
+                      <!-- <a class="btn btn-primary" href="/card/purchase?level=you">立刻申请</a> -->
+                      <a class="btn btn-primary" href="/member/new?type=3&return_url=<%=params[:return_url]%>">立刻申请</a>
                     <%else%>
-                      <a class="btn btn-primary btn-lg" href="/login?return_url=%2fvip">立刻申请</a>
+                      <a class="btn btn-primary" href="/login?return_url=%2fvip">立刻申请</a>
                     <%end%>                    
-                    <a class="btn btn-primary btn-lg" href="<%=@return_url%>">以后再说</a>
+                    <a class="btn btn-primary" href="<%=@return_url%>">以后再说</a>
                   </li>
                 </ul>
               </div>
@@ -70,13 +66,13 @@
                     积分：正常积分</li>
                   <li class="plan-action">
                     <%if signed_in?%>                
-                      <!-- <a class="btn btn-primary btn-lg" href="/card/purchase?level=you">立刻申请</a> -->
-                       <a class="btn btn-primary btn-lg" href="/member/new?type=2&return_url=<%=params[:return_url]%>">立刻申请</a>
+                      <!-- <a class="btn btn-primary" href="/card/purchase?level=you">立刻申请</a> -->
+                       <a class="btn btn-primary" href="/member/new?type=2&return_url=<%=params[:return_url]%>">立刻申请</a>
                     <%else%>
-                      <a class="btn btn-primary btn-lg" href="/login?return_url=%2fvip">立刻申请</a>
+                      <a class="btn btn-primary" href="/login?return_url=%2fvip">立刻申请</a>
                     <%end%>
 
-                    <a class="btn btn-primary btn-lg" href="<%=@return_url%>">以后再说</a>
+                    <a class="btn btn-primary" href="<%=@return_url%>">以后再说</a>
                   </li>
                 </ul>
               </div>
@@ -87,10 +83,6 @@
           </div>
         </div>
       </section>
-      <!--/#membership-->
-    </div>
-  </div>
-</section>
 
     
      

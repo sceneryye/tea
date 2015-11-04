@@ -37,17 +37,7 @@ var iswxb= isWeixinBrowser();
 
 <body>
   <%= render "/shared/header" %>
-  <section id="contact">
-  <div class="container">
-      <div class="box last">
-        <div class="row">
-          <div class="col-sm-12">
           <%= yield%>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>  
   
   <%=render "/shared/footer"%>
   <%= javascript_include_tag "jquery", "jquery_ujs" %>
