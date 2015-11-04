@@ -30,7 +30,7 @@ class Store::PaymentsController < ApplicationController
 			payment.pay_ver = '1.0'
 			payment.paycost = 0
 
-			payment.account = 'baohengboi | 佐康自然生态食品'
+			payment.account = '佐康自然生态食品'
 			payment.member_id = payment.op_id = @user.member_id
 			payment.pay_account = @user.login_name
 			payment.ip = request.remote_ip
@@ -46,21 +46,56 @@ class Store::PaymentsController < ApplicationController
 		end
 
 		@payment.money = @payment.cur_money = @order.pay_amount
-		if @payment.save
-      # if @payment.pay_app_id=='wxpay'
-      #   redirect_to "/vshop/78/payments?payment_id=#{@payment.payment_id}&supplier_id=#{params[:supplier_id]}"
-      # else
-        redirect_to "/payments/pay?id=#{@payment.payment_id}"  #pay_payment_path(@payment.payment_id)
-      # end
 
+		if @payment.save
+        	redirect_to "/payments/pay?id=#{@payment.payment_id}"
 		else			
 			redirect_to order_url(@order)
 		end
-  end
+  	end
 
-  def debug
-    render :text=>"show"
-  end
+  	def add_advance
+
+  		pay_amount = params[:pay_amount]
+
+  		payment_params = {
+				  		:money => pay_amount,
+				  		:cur_money => pay_amount,
+						:pay_app_id => params[:pay_app_id]
+						}
+		
+		payment_params.merge! Ecstore::Payment::PAYMENTS[payment_params[:pay_app_id].to_sym]
+
+		@payment = Ecstore::Payment.new payment_params do |payment|
+			payment.payment_id = Ecstore::Payment.generate_payment_id
+			payment.currency='CNY'
+			payment.status = 'ready'
+			payment.pay_ver = '1.0'
+			payment.paycost = 0
+
+			payment.account = '佐康自然生态食品'
+			payment.member_id = payment.op_id = @user.member_id
+			payment.pay_account = @user.login_name
+			payment.ip = request.remote_ip
+
+			payment.t_begin = payment.t_confirm = Time.now.to_i
+			
+			payment.pay_bill = Ecstore::Bill.new do |bill|
+				bill.rel_id = Time.now.strftime('%Y%m%d%H%M%S')
+				bill.bill_type = "refunds"
+				bill.pay_object  = "prepaid_recharge"
+				bill.money = payment_params[:money]
+			end
+		end
+
+		#@payment.money = @payment.cur_money = pay_amount
+
+		if @payment.save
+        	redirect_to "/payments/pay?id=#{@payment.payment_id}"
+		else			
+			redirect_to new_member_url
+		end
+  	end
 
 	def show
 		@payment = Ecstore::Payment.find_by_payment_id(params[:id])
@@ -72,8 +107,10 @@ class Store::PaymentsController < ApplicationController
 	        adapter = @payment.pay_app_id
 	        order_id = @payment.pay_bill.rel_id
 	        @modec_pay = ModecPay.new adapter do |pay|
-		        pay.return_url = "#{site}/payments/#{adapter}/callback?payment_id=#{@payment.payment_id}"
-		        pay.notify_url = "#{site}/payments/#{adapter}/notify?payment_id=#{@payment.payment_id}"
+	        	pay.return_url = "#{site}/payments/#{@payment.payment_id}/#{adapter}/callback"
+		        pay.notify_url = "#{site}/payments/#{@payment.payment_id}/#{adapter}/notify"		        
+		        # pay.return_url = "#{site}/payments/#{adapter}/callback?payment_id=#{@payment.payment_id}"
+		        # pay.notify_url = "#{site}/payments/#{adapter}/notify?payment_id=#{@payment.payment_id}"
 				pay.pay_id = @payment.payment_id
 				pay.pay_amount = @payment.cur_money.to_f
 				pay.pay_time = Time.now
@@ -89,7 +126,13 @@ class Store::PaymentsController < ApplicationController
 		        render :inline=>@modec_pay.html_form_wxpay
 		     # render :inline=>@modec_pay.html_form_wxpay,:layout=>"patch"
 		    else
-				 render :inline=>@modec_pay.html_form
+		    	if adapter=='deposit'
+		    		advance = @user.advance
+		    		Ecstore::Member.where(:member_id=>@user.member_id).update_all(:advance=>advance-@payment.cur_money)
+			        @adv_log ||= Logger.new('log/adv.log')
+			        @adv_log.info("member id: "+@user.member_id.to_s+"--advance:"+advance.to_s+"=>"+@user.advance.to_s)
+		    	end
+				render :inline=>@modec_pay.html_form
 		    end
 
 			Ecstore::PaymentLog.new do |log|
@@ -107,9 +150,16 @@ class Store::PaymentsController < ApplicationController
 	end
 
 	def callback
+		if params[:error_message]
+			return render :text=>"支付不成功。error_message:#{params[:error_message]}"
+		end
+
 		ModecPay.logger.info "[#{Time.now}][#{request.remote_ip}] #{request.request_method} \"#{request.fullpath}\""
 
-		@payment = Ecstore::Payment.find(params.delete(:payment_id))
+		@payment = Ecstore::Payment.find(params.delete(:id))
+		#@payment = Ecstore::Payment.find(params[:payment_id])	
+
+		
 		return redirect_to detail_order_path(@payment.pay_bill.order) if @payment&&@payment.paid?
 		
 		adapter  = params.delete(:adapter)
@@ -118,14 +168,13 @@ class Store::PaymentsController < ApplicationController
 
 		@payment.payment_log.update_attributes({:return_ip=>request.remote_ip,:return_params=> params,:returned_at=>Time.now}) if @payment.payment_log
 
-		if @payment.pay_bill.bill_type =='payment' && @payment.pay_bill.pay_object == 'order'
+		if @payment.pay_bill.bill_type =='payments' && @payment.pay_bill.pay_object == 'order'
 			@order = @payment.pay_bill.order
 		end
-		order_id = @payment.bill.rel_id
+		order_id = @payment.pay_bill.rel_id
 
 		@user = @payment.user
-
-		result = ModecPay.verify_return(adapter, params, { :bill99_redirect_url=>detail_order_url(@order),:ip=>request.remote_ip })
+		result = ModecPay.verify_return(adapter, params, {:ip=>request.remote_ip })		
 
 		if result.is_a?(Hash) && result.present?
 			response = result.delete(:response)
@@ -145,17 +194,17 @@ class Store::PaymentsController < ApplicationController
 		else
 			response =  result
 		end
-		if @payment.pay_bill.bill_type =='payment' && @payment.pay_bill.pay_object == 'order'
+		if @payment.pay_bill.bill_type =='payments' && @payment.pay_bill.pay_object == 'order'
 			redirect_to detail_order_path(@payment.pay_bill.order)
 		else
 			@member = Ecstore::Member.find(@user.member_id)
-			advance =10000
+			advance = @payment.money
        
 	        @member.member_lv_id = @user.apply_type
 	        
-	          @adv_log ||= Logger.new('log/adv.log')
+	        @adv_log ||= Logger.new('log/adv.log')
 	          @adv_log.info("member id: "+@member.member_id.to_s+"--advance:"+@member.advance.to_s+"=>"+ advance.to_s)
-	          @member.advance = advance
+	          @member.advance += advance
 	        @member.save
 			redirect_to member_path
 		end
@@ -178,21 +227,6 @@ class Store::PaymentsController < ApplicationController
 
 		@order = @payment.pay_bill.order
 		@user = @payment.user
-
-		if @payment.pay_bill.bill_type =='payment' && @payment.pay_bill.pay_object == 'order'
-			redirect_to detail_order_path(@payment.pay_bill.order)
-		else
-			@member = Ecstore::Member.find(@user.member_id)
-			advance =10000
-       
-	        @member.member_lv_id = @user.apply_type
-	        
-	          @adv_log ||= Logger.new('log/adv.log')
-	          @adv_log.info("member id: "+@member.member_id.to_s+"--advance:"+@member.advance.to_s+"=>"+ advance.to_s)
-	          @member.advance = advance
-	        @member.save
-			redirect_to member_path
-		end
 
 
 		result = ModecPay.verify_notify(adapter,params,{ :bill99_redirect_url=>"#{site}/#{order_path(@order)}",:ip=>request.remote_ip })
@@ -217,6 +251,20 @@ class Store::PaymentsController < ApplicationController
 					order_log.log_text = "订单支付成功！"
 				end.save
 			end
+			if @payment.pay_bill.bill_type =='payments' && @payment.pay_bill.pay_object == 'order'
+				redirect_to detail_order_path(@payment.pay_bill.order)
+			else
+				@member = Ecstore::Member.find(@user.member_id)
+				advance = @payment.money
+	       
+		        @member.member_lv_id = @user.apply_type
+		        
+		        @adv_log ||= Logger.new('log/adv.log')
+		          @adv_log.info("member id: "+@member.member_id.to_s+"--advance:"+@member.advance.to_s+"=>"+ advance.to_s)
+		          @member.advance = advance
+		        @member.save
+				redirect_to member_path
+			end
 		else
 			response =  result
 		end
@@ -224,8 +272,7 @@ class Store::PaymentsController < ApplicationController
 		render :text=>response
 	end
 
-	def test_notify
-		
+	def test_notify		
 
 		@payment = Ecstore::Payment.find(params[:id])
 		if @payment #&& @payment.status == 'ready'
@@ -239,25 +286,7 @@ class Store::PaymentsController < ApplicationController
 				pay.fields = {}
 
 				time = Time.now
-        if adapter == "ips"
-          # ===Ips
-          pay.fields["Mer_code"] = "000015"
-          pay.fields["Billno"] = @payment.payment_id,
-          pay.fields["Amount"] = @payment.cur_money.round(2)
-          pay.fields["Date"] = time.strftime("%Y-%m-%d")
-          pay.fields["Currency_Type"] = "RMB"
-          pay.fields["Gateway_Type"] = "01"
-          pay.fields["Lang"] = "GB"
-          pay.fields["Merchanturl"] = ""
-          pay.fields["FailUrl"] = @payment.payment_id
-          pay.fields["ErrorUrl"] = ""
-          pay.fields["Attach"] = ""
-          pay.fields["OrderEncodeType"] = "5"
-          pay.fields["RetEncodeType"] = "17"
-          pay.fields["Rettype"] = "1"
-          pay.fields["ServerUrl"] = ""
-          pay.fields["SignMD5"] = ""
-        end
+       
 				if adapter == "alipay"
 					# ===Alipay
 					pay.fields["discount"] = "0.00"
@@ -281,94 +310,7 @@ class Store::PaymentsController < ApplicationController
 					pay.fields["notify_id"] = "1b2658003817950ee56fb6785ce505086w"
 					pay.fields["use_coupon"] = "N"
 					pay.fields["sign_type"] = "MD5"
-				end
-
-				if adapter == "99bill"
-					pay.sorter = []
-					pay.fields = {
-						"merchantAcctId"=>"1002214092801",
-						"version"=>"v2.0",
-						"language"=>"1",
-						"signType"=>"1",
-						"payType"=>"10",
-						"bankId"=>"BOC",
-						"orderId"=>@payment.payment_id,
-						"orderTime"=>(time - 5.seconds).strftime("%Y%m%d%H%M%S"),
-						"orderAmount"=>(@payment.cur_money * 100).to_i,
-						"dealId"=>(0..9).collect{ rand(10) }.join,
-						"bankDealId"=>"130901261143",
-						"dealTime"=>time.strftime("%Y%m%d%H%M%S"),
-						"payAmount"=>(@payment.cur_money * 100).to_i,
-						"fee"=>(@payment.cur_money * 100 * 0.004).to_i,
-						"ext1"=>"",
-						"ext2"=>"",
-						"payResult"=>"10",
-						"errCode"=>""}
-				end
-				if adapter == "bcom"
-					# ===Bcom
-					# 301310053119675|13786093763144|929.00|CNY|20130908| |20130908|111153|ABFF516B|1|5.57|2| | |119.165.52.9|www.i-modec.com| |
-					pay.sorter =[]
-					src = {
-						'MERCHNO'=>pay.mer_id,
-						'orderno'=>@payment.payment_id,
-						'tranamount'=>@payment.cur_money.round(2),
-						'TRANCURRTYPE'=>"CNY",
-						'paybatno'=>time.strftime("%Y%m%d"),
-						'MERCHBATCHNO'=>'',
-						'TRANDATE'=>(time - 5.seconds).strftime("%Y%m%d"),
-						'TRANTIME'=>(time - 5.seconds).strftime("%H%M%S"),
-						'SERIALNO'=>"0000#{rand(10)}#{rand(10)}#{rand(10)}",
-						'TRANRST'=>'1',
-						'FEESUM'=>(@payment.cur_money * 0.006).round(2),
-						'CARDTYPE'=>'2',
-						'BankMoNo'=>'',
-						'ErrDis'=>''
-					}.collect{ |key,val| val }.join("|")
-					sign = ModecPay::Bcom::Sign.new.generate_sign(src)
-					pay.fields['notifyMsg'] = "#{src}|#{sign}"
-				end
-				
-				if adapter == "icbc"
-					# === Icbc
-					pay.sorter = []
-					b2c_res = {
-						'interfaceName'=>'ICBC_PERBANK_B2C',
-						'interfaceVersion'=>'1.0.0.11',
-						'orderInfo' => {
-							'orderDate'=>time.strftime('%Y%m%d%H%M%S'),
-							'curType'=>'001',
-							'merID'=>pay.mer_id,
-							'subOrderInfoList'=>{
-								'subOrderInfo'=>{
-									'orderid'=>@payment.payment_id,
-									'amount'=>(@payment.cur_money*100).round.to_s,
-									'installmentTimes'=>(@payment.pay_bill.order.installment || 1).to_s,
-									'merAcct'=>'1001258219300435028',
-									'tranSerialNo'=>'2013092315051111'
-								}
-							}
-						},
-						'custom'=>{
-							'verifyJoinFlag'=>'0',
-							'JoinFlag'=>'0',
-							'UserNum'=>''
-						},
-						'bank'=>{
-							'TranBatchNo'=>'',
-							'notifyDate'=>(time+5.seconds).strftime('%Y%m%d%H%M%S'),
-							'tranStat'=>'1',
-							'comment'=>''
-						}
-					}
-
-					xml = '<?xml version="1.0" encoding="GBK" standalone="no"?>'+b2c_res.to_xml(:root=>"B2CRes",:skip_instruct=>true,:indent=>0)
-					sign = ModecPay::Icbc::Sign.new
-					pay.fields['merVAR'] = ''
-					pay.fields['notifyData'] = sign.encodebase64(xml)
-					pay.fields['signMsg'] = sign.generate_sign2(xml)
-				end
-				
+				end				
 			end
 
 			render :inline=>@modec_pay.html_form

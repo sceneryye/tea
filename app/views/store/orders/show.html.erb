@@ -40,17 +40,6 @@
         <%end%>
 
         <label class="radio">
-          <%=f.radio_button :pay_app_id, "offline", { :checked=>(@order.payment == 'offline') }%> <b>货到付款</b>
-          <span class="extra-desc"></span>
-        </label>
-
-        <label class="radio" style="display:none">
-          <%=f.radio_button :pay_app_id, "alipay", { :checked=>(@order.payment == 'alipay') }%> <b>支付宝</b>
-        </label>
-        <label class="radio" style="display:none">
-          <%=f.radio_button :pay_app_id, "alipaywap", { :checked=>(@order.payment == 'alipaywap') }%> <b>支付宝手机版</b>
-        </label>
-        <label class="radio">
           <%=f.radio_button :pay_app_id, "wxpay", { :checked=>(@order.payment == 'wxpay') }%> <b>微信支付</b>
         </label>
 

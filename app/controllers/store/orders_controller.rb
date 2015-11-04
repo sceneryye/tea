@@ -3,7 +3,7 @@ class Store::OrdersController < ApplicationController
   before_filter :authorize_user!
   layout 'order'
 
-   def create
+  def create
     addr = Ecstore::MemberAddr.find_by_addr_id(params[:member_addr])
     ["name","area","addr","zip","tel","mobile"].each do |key,val|
         params[:order].merge!("ship_#{key}"=>addr.attributes[key])
@@ -39,8 +39,6 @@ class Store::OrdersController < ApplicationController
     @line_items.each do |line_item|
       product = line_item.product
       good = line_item.good
-
-
       
       @order.order_items << Ecstore::OrderItem.new do |order_item|
         order_item.product_id = product.product_id
@@ -265,15 +263,7 @@ class Store::OrdersController < ApplicationController
   def show
 
     @order = Ecstore::Order.find_by_order_id(params[:id])
-    if params["platform"]=="mobile"
-      supplier_id=params[:supplier_id]
-      if supplier_id==nil
-        supplier_id=78
-      end
-      @supplier = Ecstore::Supplier.find(supplier_id)
-      render :layout=>@supplier.layout
-
-    end
+    
   end
 
 

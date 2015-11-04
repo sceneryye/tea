@@ -3,7 +3,6 @@ require 'modec_pay/alipay'
 require 'modec_pay/alipaywap'
 require 'modec_pay/offline'
 require 'modec_pay/deposit'
-require 'modec_pay/ips'
 require 'modec_pay/wxpay'
 
 module ModecPay
@@ -36,9 +35,8 @@ module ModecPay
 
 		def adapters
 			{
-	          'ips' => ModecPay::Ips,
-	          'alipay' => ModecPay::Alipay,
-	          'alipaywap' => ModecPay::Alipaywap,
+	         'alipay' => ModecPay::Alipay,
+	         'alipaywap' => ModecPay::Alipaywap,
 			 'offline'=> ModecPay::Offline,
 			 'deposit'=> ModecPay::Deposit,
 	         'wxpay' => ModecPay::Wxpay

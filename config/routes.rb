@@ -426,7 +426,7 @@ end
         post 'new_manco'
         get 'new_mobile_addr'
         get 'new_manco_addr'
-       get 'departure'
+        get 'departure'
         post 'arrival'
         get 'arrival'
         get 'mobile_show_order'
@@ -443,22 +443,22 @@ end
     resources :payments do
 
       collection do
+        get 'add_advance'
         get 'callback'
-        get 'debug'
-         get 'pay'
-        match ':adapter/notify'=>"payments#notify", :as=>"notify"
-        match ':adapter/callback'=>"payments#callback", :as=>"callback"
+        get 'pay'
+        # match ':adapter/notify'=>"payments#notify", :as=>"notify"
+        # match ':adapter/callback'=>"payments#callback", :as=>"callback"
       end
 
-      # member do
-      #   get 'pay'
-      #   match ':adapter/notify'=>"payments#notify", :as=>"notify"
-      #   match ':adapter/callback'=>"payments#callback", :as=>"callback"
-      #   if Rails.env == 'development'
-      #     get 'test_notify'
-      #     get 'test_callback'
-      #   end
-      # end
+      member do
+       # get 'pay'
+        match ':adapter/notify'=>"payments#notify", :as=>"notify"
+        match ':adapter/callback'=>"payments#callback", :as=>"callback"
+        if Rails.env == 'development'
+          get 'test_notify'
+          get 'test_callback'
+        end
+      end
     end
   end
 

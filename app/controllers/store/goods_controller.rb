@@ -32,13 +32,15 @@ class Store::GoodsController < ApplicationController
         @recommend_goods += @cat.parent_cat.parent_cat.all_goods.select{|good| good.goods_id != @good.goods_id }[0,4-count]
       end
     end
-    case cookies[:MLV]
-    when "1"
-      @current_lv_1 ='plan-price'
-    when "2" 
-       @current_lv_2 ='plan-price'
-    when "3"
-       @current_lv_3='plan-price'
+    if @user
+      case @user.member_lv_id
+      when 1
+        @current_lv_1 ='plan-price'
+      when 2
+         @current_lv_2 ='plan-price'
+      when 3
+         @current_lv_3='plan-price'
+      end
     end
     respond_to do |format|
       format.html { render :layout=>"store" }
