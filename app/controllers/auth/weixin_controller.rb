@@ -80,10 +80,8 @@ class Auth::WeixinController < ApplicationController
 			  			u.regtime = now.to_i
 			  		end
 		  			@user.save!(:validate=>false)
-					#return render :text=>after_user_sign_in_path
-		  			sign_in(@account)
-		  			redirect_to new_user_path
-		  			#redirect_to after_user_sign_in_path
+		  			sign_in(@account,'1')
+		  			return redirect_to "/vip"
 		  		end
 	  		end
 
