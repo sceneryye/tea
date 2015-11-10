@@ -9,7 +9,7 @@ function isWeixinBrowser(){
 <% return_url={:return_url => request.url.sub('http://trade','').sub('?from=weixin_menu','').force_encoding('UTF-8')}.to_query%>
 var iswxb= isWeixinBrowser();
 
- if ('<%=@user.nil?%>'==='true' && isWeixinBrowser() ){
+ if ('<%=@user.nil?%>'==='true' && iswxb ){
         location.href = "/auto_login?id=1&<%=return_url%>";
  }
 <%if @user%>

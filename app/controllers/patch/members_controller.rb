@@ -13,29 +13,55 @@ class Patch::MembersController < ApplicationController
 	end
 
   def new
+    if params[:apply_type]=='2'
+      @checked2='checked'
+    else
+      @checked3='checked'
+    end
   end
 
-  def create
-    pay_amount= 2000
-    pay_app_id = 'wxpay'
 
-    apply_type=params[:user][:apply_type] 
-
-    if apply_type =='3'
-      pay_amount= 10000
-    end
+  def update
       
-    if @user.update_attributes(params[:user])
-      redirect_to add_advance_payments_url(:pay_amount=>pay_amount,:pay_app_id=>pay_app_id)
+    if @user.update_attributes(params[:ecstore_user].merge!(:apply_time=>Time.now))
+      redirect_to advance_member_path
     else
-      render "/member/new"
+      if @user.apply_type==2
+      @checked2='checked'
+    else
+      @checked3='checked'
     end
+      render "new"
+    end
+  end
+
+  def advance
+    @deposit = 0
+    if @user.member_lv_id<2 #普通会员
+        if @user.apply_type>1 #用户已申请
+            @member_lv = Ecstore::MemberLv.find(@user.apply_type)
+            @deposit = @member_lv.deposit
+        else          
+          redirect_to '/vip'
+        end
+    else
+       @deposit = @user.member_lv.deposit
+    end
+  
+
+    @advances = @user.member_advances.paginate(:page=>params[:page],:per_page=>10)
+    add_breadcrumb("我的预存款")
+  end
+  
+  def favorites
+    @favorites = @user.favorites.includes(:good).paginate(:page=>params[:page],:per_page=>10,:order=>"create_time desc")
+    add_breadcrumb("我的收藏")
   end
 
 	def show
 		@orders = @user.orders.limit(5)
 		@unpay_count = @user.orders.where(:pay_status=>'0',:status=>'active').size
-		add_breadcrumb("我的佐康原生态食品")
+		add_breadcrumb("我的佐康")
 	end
 
 	def orders
@@ -90,7 +116,7 @@ class Patch::MembersController < ApplicationController
 
           in_or_out =log.in_or_out== "\1"  ? '入库' : '出库'
           createtime =Time.at(log.createtime).to_s
-#log.quantity.to_s,log.product_id.quantity.to_s,
+      #log.quantity.to_s,log.product_id.quantity.to_s,
           sheet.add_row [in_or_out,log.bn,log.barcode.to_s,nil,log.name,log.price,log.quantity,createtime] ,
                         :style=>product_cell,:height=>50
 
@@ -115,17 +141,6 @@ class Patch::MembersController < ApplicationController
     send_data package.to_stream.read,:filename=>"inventory_#{Time.now.strftime('%Y%m%d%H%M%S')}.xlsx"
   end
 
-	def advance
-    if @user.advance.to_i ==0
-        redirect_to '/vip?return_url=/cart' #'register?from=weixin&return_url=/cart'
-    end
-		@advances = @user.member_advances.paginate(:page=>params[:page],:per_page=>10)
-		add_breadcrumb("我的预存款")
-	end
-	
-	def favorites
-		@favorites = @user.favorites.includes(:good).paginate(:page=>params[:page],:per_page=>10,:order=>"create_time desc")
-		add_breadcrumb("我的收藏")
-	end
+
 	
 end

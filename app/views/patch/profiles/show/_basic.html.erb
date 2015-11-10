@@ -18,7 +18,7 @@
 
 	<div class="field">
 		<label>收信邮箱:</label>
-		<span><%=@user.mask_email%></span>
+		<span><%=(@user.email && @user.email.length>5) ? @user.mask_email : @user.email%></span>
 		<%=link_to "修改邮箱>>",edit_profile_path(:tab=>'basic',:modify=>'email'),:class=>"modify"%>
 		<%if @user.email_validate=='true'%>
 		<span class="tip">邮箱已认证</span>
@@ -43,7 +43,7 @@
 	</div>
 	<div class="field">
 		<label>手机:</label>
-		<span><%=@user.mask_mobile%></span>
+		<span><%=(@user.mobile && @user.mobile.length>10) ? @user.mask_mobile : @user.mobile %></span>
 		<%=link_to "修改手机>>",edit_profile_path(:tab=>'basic',:modify=>'mobile'),:class=>"modify"%>
 		<%if @user.sms_validate=='true'%>
 		<span class="tip">手机已认证</span>

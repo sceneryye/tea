@@ -206,7 +206,7 @@ class Store::PaymentsController < ApplicationController
 	          @adv_log.info("member id: "+@member.member_id.to_s+"--advance:"+@member.advance.to_s+"=>"+ advance.to_s)
 	          @member.advance += advance
 	        @member.save
-			redirect_to member_path
+			redirect_to advance_member_path
 		end
 	end
 

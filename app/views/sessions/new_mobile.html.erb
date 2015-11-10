@@ -3,6 +3,11 @@
         display: none;
     }
 </style>
+<script>
+  if ('<%=@user.nil?%>'==='true' && iswxb ){
+    location.href = "/member/advance";
+  }
+</script>
 
 <%=render "shared/metable", :resource => nil %>
 

@@ -11,14 +11,15 @@ gem 'will_paginate', '~> 3.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'activerecord-mysql2-adapter'
 gem 'mysql2'
 gem 'wicked'
 gem 'hashie'
 gem 'faraday'
 gem "geocoder"
 gem 'spreadsheet'
-#gem 'weibo_2' #,:git=>"https://github.com/simsicon/weibo_2.git"
 
+#gem 'weibo_2' #,:git=>"https://github.com/simsicon/weibo_2.git"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -31,17 +32,20 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 
 end
-
+gem 'iconv'
 gem  'sitemap_generator'
 
-gem 'jquery-rails',  '~> 2.1.4'
-gem 'jquery-ui-rails',  '~> 2.0.2'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 gem 'rmagick','~> 2.13.1'
 
 gem 'ya2yaml'
 
 gem 'whenever', :require=>false
+
+
+# gem 'rack-mini-profiler' 
 
 #gem 'rjb'
 
@@ -50,6 +54,12 @@ gem 'execjs'
 gem 'therubyracer'
 
 gem 'axlsx'
+
+#gem 'weixin_rails_middleware', git: "git://github.com/lanrion/weixin_rails_middleware.git", branch: "master"
+gem 'weixin_rails_middleware'
+
+gem 'weixin_authorize'
+gem "redis-namespace"
 
 gem 'rest-client'
 gem 'httpclient'
@@ -61,6 +71,9 @@ gem 'httpclient'
 
 # Use unicorn as the app server
 gem 'unicorn'
+
+# Use rails_db to look up datas
+
 
 # Deploy with Capistrano
 # gem 'capistrano'

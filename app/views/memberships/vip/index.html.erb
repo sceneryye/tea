@@ -45,7 +45,7 @@
                   <li class="plan-action">
                     <%if signed_in?%>                
                       <!-- <a class="btn btn-primary" href="/card/purchase?level=you">立刻申请</a> -->
-                      <a class="btn btn-primary" href="/member/new?type=3&return_url=<%=params[:return_url]%>">立刻申请</a>
+                      <a class="btn btn-primary" href="/member/new?apply_type=3&return_url=<%=params[:return_url]%>">立刻申请</a>
                     <%else%>
                       <a class="btn btn-primary" href="/login?return_url=%2fvip">立刻申请</a>
                     <%end%>                    
@@ -67,7 +67,7 @@
                   <li class="plan-action">
                     <%if signed_in?%>                
                       <!-- <a class="btn btn-primary" href="/card/purchase?level=you">立刻申请</a> -->
-                       <a class="btn btn-primary" href="/member/new?type=2&return_url=<%=params[:return_url]%>">立刻申请</a>
+                       <a class="btn btn-primary" href="/member/new?apply_type=2&return_url=<%=params[:return_url]%>">立刻申请</a>
                     <%else%>
                       <a class="btn btn-primary" href="/login?return_url=%2fvip">立刻申请</a>
                     <%end%>

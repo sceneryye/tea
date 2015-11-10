@@ -20,3 +20,7 @@ stdout_path APP_PATH + "/log/unicorn.stdout.log"
 after_fork do |server, worker|
   ActiveRecord::Base.establish_connection
 end
+
+before_exec do |server| 
+  ENV["BUNDLE_GEMFILE"] = "/path/to/app/current/Gemfile" 
+end

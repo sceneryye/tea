@@ -7,7 +7,7 @@ function isWeixinBrowser(){
 <% return_url={:return_url => request.url.sub('http://trade','').force_encoding('UTF-8')}.to_query%>
 var iswxb= isWeixinBrowser();
 
- if ('<%=@user.nil?%>'==='true' && isWeixinBrowser() ){
+ if ('<%=@user.nil?%>'==='true' && iswxb){
         location.href = "/auto_login?id=1&<%=return_url%>";
  }
 </script>
@@ -18,7 +18,7 @@ var iswxb= isWeixinBrowser();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>佐康原生态食品原</title>
+    <title>佐康原生态食品</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/prettyPhoto.css" rel="stylesheet">

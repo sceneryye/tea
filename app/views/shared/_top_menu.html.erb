@@ -16,10 +16,7 @@
                 <%if @user%>
                     <li class="outlink"><a href="/member/orders">我的订单</a></li>
                     <li class="outlink"><a href="/cart">我的购物车</a></li>
-                    <li class="outlink"><a href="/profile/password">修改密码</a></li>
-                    <%if @user.member_lv_id==2%>
-                        <li class="outlink"><a href="/member/shares">我的返利</a></li>
-                    <%end%>
+                    <li class="outlink"><a href="/profile/password">修改密码</a></li>                    
                 <%else%>
                     <li class="outlink">
                         <a class="loggedin login girl_head" href="/login">登录</a>
