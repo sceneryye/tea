@@ -4,40 +4,44 @@
         <div class="row">
           <div class="col-sm-12">
 
-<div class="section member-info clearfix">
+<div class="section member-info clearfix" style="font-weight:bold;font-size:14px;color:#000000;">
 	
 	<div class="basic">
 		<p class="welcome">
-			<b><%=@user.name%></b> ，欢迎您！
+			<b><%=@user.name%></b> &nbsp;欢迎您！
 			<span class="lv">
-				会员等级：<%=@user.member_lv.name%>
+				会员等级：<span style="color:green;font-size:16px"><%=@user.member_lv.name%></span>
 			</span>&nbsp;         
 		</p>
+		<p>
+			<span class="notify">
+			<span>预存款: <span class="currency" style="color:red;font-weight:bolder;font-size:18px">&yen; <%=@user.advance%></span></span>&nbsp;&nbsp;
+				<%=link_to  "待付款订单(#{@unpay_count})",orders_member_path(:pay_status=>'0',:status=>'active')%>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+		</p>
+		
 		<p class="validation">
 			<span class="email">
 				邮箱认证：
 				<%if @user.email_validated?%>
 					<span class="validated">邮箱已认证</span>
 				<%else%>
-					<%=link_to "邮箱未认证",email_validation_path%>
+					<%=link_to "邮箱未认证",email_validation_path,:style=>'font-weight:bold;font-size:16px'%>
 				<%end%>
 			</span>
+			<br/>
 			<span class="mobile">
 				手机认证：
 				<%if @user.sms_validated?%>
 					<span class="validated">手机已认证</span>
 				<%else%>
-					<%=link_to "手机未认证",mobile_validation_path%>
+					<%=link_to "手机未认证",mobile_validation_path,:style=>'font-weight:bold;font-size:16px'%>
 				<%end%>
 			</span>
 			
 		</p>
-		<p>
-			<span class="notify">
-				<%=link_to  "待付款订单(#{@unpay_count})",orders_member_path(:pay_status=>'0',:status=>'active')%>
-			</span>
-			<span>预存款: <span class="currency">&yen; <%=@user.advance%></span></span>
-		</p>
+		
 	</div>
 </div>
 
@@ -45,44 +49,33 @@
 <div class="title">
 	最近订单
 	<%=link_to "所有订单>>",orders_member_path,:class=>"all-orders"%>
-</div>
-<table class="table table-striped" id="order_list">
-	<tr>
-		<th>订单号</th>
-		<th>订单商品</th>
-		
-		<th>下单时间</th>
-		<th>订单金额</th>
-		<th>订单状态</th>
-		<th>操作</th>
-	</tr>
-	
-	<%@orders.each  do |order|%>
-	<tr>
-		<td><%=link_to order.order_id, order_path(order)%></td>
-		<td>
-			<%order.order_items.each_with_index do |order_item,index|%>
-				<%
-					link_title = order_item.name
-					link_title = "赠品:#{link_title}" if order_item.item_type == 'gift'
-				%>
-				<%=link_to good_path(order_item.good.bn),:title=>link_title,:target=>"_blank",:class=>"thumb-link" do %>
-					<%=image_tag order_item.good.medium_pic,:class=>"thumb",:alt=>order_item.name if order_item.item_type == 'product'%>
-					<%=image_tag order_item.product.gift_image_url,:class=>"thumb",:alt=>order_item.name if order_item.item_type == 'gift'%>
-				<%end%>
+</div >
+<%@orders.each  do |order|%>
+			<div class="row" style="font-weight:bold;font-size:14px;color:#000000;text-align: center;">
+				<div class="col-sm-2">订单编号：<%=link_to order.order_id, order_path(order),:target=>"_blank"%></div><div class="col-sm-2">下单时间：<%=order.created_at%></div>
+				<div class="col-sm-3">
+					<%order.order_items.each_with_index do |order_item,index|%>
+						<%
+							link_title = order_item.name
+							link_title = "赠品:#{link_title}" if order_item.item_type == 'gift'
+						%>
+						<%=link_to good_path(order_item.good.bn),:title=>link_title,:target=>"_blank",:class=>"thumb-link" do %>
+                          <%=image_tag order_item.good.medium_pic,:class=>"thumb",:alt=>order_item.name if order_item.product&&order_item.item_type == 'product'%>
+                          <%=image_tag order_item.product.gift_image_url,:class=>"thumb",:alt=>order_item.name if order_item.product&&order_item.item_type == 'gift'%>
+						<%end%>
 
+					<%end%>
+				</div>
+				
+				
+				<div class="col-sm-2" style="font-weight:normal;font-size:18px">金额：<span style="color:red;font-weight:bolder;font-size:18px">&yen;<%=order.final_amount.round%></span></div>
+				<div class="col-sm-1">订单状态：<%=order.status_text%></div>
+				<div class="col-sm-2">
+					<span><%=link_to "查看",detail_order_path(order),:target=>"_blank",:style=>'color:green;font-weight:bold;font-size:18px'%></span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span><%=link_to "去付款",order_path(order),:style=>'color:red;font-weight:bold;font-size:18px',:target=>"_blank" if order.status == 'active' && order.pay_status=='0'%></span><hr/>
+				</div>
+			</div>
 			<%end%>
-		</td>
-		
-		<td><%=order.created_at%></td>
-		<td>&yen;<%=order.final_amount.to_i%></td>
-		<td><%=order.status_text%></td>
-		<td>
-			<div><%=link_to "查看",detail_order_path(order),:target=>"_blank"%></div>
-			<div><%=link_to "去付款",order_path(order),:target=>"_blank" if order.status == 'active' && order.pay_status=='0'%></div>
-		</td>
-	</tr>
-	<%end%>
 </table>
 	</div>
 	</div>

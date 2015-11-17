@@ -1,8 +1,13 @@
-<div id="show_basic">
+<div id="show_basic" style="color:#000000;font-weight:bolder;">
 	<%=hidden_field_tag :tab,"basic"%>
 	<div class="field">
 		<label>真实姓名:</label>
-		<span><%=@user.name.present? ? @user.name : "未填写"%></span>
+		<span><%=@user.name.present? ? @user.name : "未填写"%></span>	
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label>性别:</label>
+		<span>
+			<%=@user.sex_text%>
+		</span>
 	</div>
 	<div class="field">
 		<label>性别:</label>

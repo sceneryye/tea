@@ -29,12 +29,12 @@
                     <%end%>
                 </div>
             </div>
-            <div class="col-sm-1 col-xs-6 form-group">￥<%= (line_item.product.price*@user.member_lv.dis_count).round%></div>
+            <div class="col-sm-1 col-xs-6 form-group"> <span class="visible-xs"  style="font-weight:bolder;font-size:16px">单价:</span> <span style="color:red;font-weight:bolder;font-size:16px">&yen;<%= (line_item.product.price*@user.member_lv.dis_count).round%></span></div>
             <div class="col-sm-1 col-xs-6 form-group">
             <%=select_tag :quantity, options_for_select(1..20,line_item.quantity.to_i || default_value),:class=>"quantity form-control",:'data-url'=>cart_path(line_item.obj_ident),:id=>'cart'%>
             </div>
             <div class="col-sm-2  col-xs-6 line-total form-group">              
-            <span class="visible-xs">小计</span>￥<%=(line_item.product.price*line_item.quantity*@user.member_lv.dis_count).round%>
+            <span class="visible-xs" >金额小计:</span><span >&yen;<%=(line_item.product.price*line_item.quantity*@user.member_lv.dis_count).round%></span>
             </div>
             <!-- <span class="visible-xs">积分</span>
             <div class="col-sm-1 line-total form-group">
