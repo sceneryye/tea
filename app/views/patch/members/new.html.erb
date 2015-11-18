@@ -23,10 +23,12 @@
                                 <div class="form-group">
                                     <label>充值卡类型:</label>
                                     <span>
+                                     <% if params[:apply_type] == '2' %>
                                         <%=f.radio_button :apply_type, 2,:checked=>@checked2%>
-                                        <label for="user_appy_type_2" class="radio-label" style="margin-right:10px;">贵宾卡</label>
+                                        <label for="user_appy_type_2" class="radio-label" style="margin-right:10px;">贵宾卡</label><% else %>
                                         <%=f.radio_button :apply_type, 3,:checked=>@checked3%>
                                         <label for="user_appy_type_3" class="radio-label">钻石卡</label>
+                                        <%end%>
                                     </span>
                                 </div>
                                 <div class="help-block" rel="user_appy_type"></div>
@@ -147,7 +149,8 @@
                             <div class="col-sm-12">                 
                                 <div class="help-block1 status alert alert-success" style="display: none"></div>
                                <!--  <input type="checkbox" checked="checked" value="agree" name="user[license]" id="license" class="x-input required" autocomplete="off"> -->
-                                <label for="license" class="checkbox_label" id="i_agree">&nbsp;我已阅读并同意：</label><a href="/pages/zhucexieyi" target="_top"  id="reg_term">会员注册协议</a>
+                                 <input name="" type="checkbox" checked="checked"  id="ckb" /> 
+                                  <label for="license" class="checkbox_label" id="i_agree">&nbsp;我已阅读并同意：</label><a href="/pages/zhucexieyi" target="_top"  id="reg_term">会员注册协议</a>
                                 <span id="and">和</span>&nbsp;<a href="/pages/ysbh" id="privacy" target="_top">隐私保护政策</a>
                                 <div class="help-block" rel="user_license"></div>
                             </div>
@@ -156,7 +159,7 @@
                             <div class="col-sm-12">  
                                 <div class="help-block" style="color:red">*打星号的为必填项*</div>                                 
                                 <div class="form-group">
-                                     <%=f.submit "提 交",:class=>"btn btn-success btn-lg"%>
+                                     <%=f.submit "提 交",:class=>"btn btn-success btn-lg",:name=>"btn",:id=>"btn" %>
                                      <%=link_to "返 回","/",:class=>"btn btn-success btn-lg", :style=>'color:white'%>            
                                 </div>
                             </div>
@@ -168,6 +171,7 @@
     </div><!--/.container-->
 </section><!--/#contact-->
 
+
 <script src="/assets/jquery.js?body=1" type="text/javascript"></script>
 <script src="/assets/jquery_ujs.js?body=1" type="text/javascript"></script>
 <script src="/assets/bootstrap-transition.js?body=1" type="text/javascript"></script>
@@ -176,3 +180,11 @@
 <script src="/assets/login.js?body=1" type="text/javascript"></script>
   <script src="/assets/area_seletor.js?body=1" type="text/javascript"></script>
 <script src="/assets/patch/member_addrs.js?body=1" type="text/javascript"></script>
+<script  type="text/javascript">
+          $('#ckb').click(function(){
+            if ($(this).prop('checked')){
+                $('#btn').removeAttr('disabled');
+            } else {
+                $('#btn').attr('disabled', 'true');
+            }
+        });</script>
