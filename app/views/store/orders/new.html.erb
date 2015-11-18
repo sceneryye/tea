@@ -1,9 +1,9 @@
 <%if @line_items.size > 0%>
 	<div class="section addr">
-		<h5>
-			收货地址 
+		<h4>
+			<!--<a href="../member_addrs"></a>-->收货地址 
 			<span class="required">*</span>
-		</h5>
+		</h4>
       <div class="checkcon clearfix addr-list">
 		<%if @addrs.size>0%>
 			<%@addrs.each_with_index do |addr,index|%>
@@ -135,8 +135,8 @@
 			<div class="memo">
 				<div class="control-group">
 				    <%=f.label :memo, "订单备注：",:class=>"control-label"%>
-				    <div class="controls">
-				      <%=f.text_area :memo,:rows=>4%>
+				    <div class="controls" style="width:90%">
+				      <%=f.text_area :memo,:rows=>4,:style=>"width:100%"%>
 				    </div>
 				</div>
 			</div>
