@@ -57,6 +57,8 @@ class Store::PaymentsController < ApplicationController
   	def add_advance
 
   		pay_amount = params[:pay_amount]
+  		
+  		#pay_amount = 0.01 #测试充值用
 
   		payment_params = {
 				  		:money => pay_amount,

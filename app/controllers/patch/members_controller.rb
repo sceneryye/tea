@@ -13,6 +13,9 @@ class Patch::MembersController < ApplicationController
 	end
 
   def new
+    if @user && (@user.member_lv_id>1 || @user.apply_type>1)
+      redirect_to advance_member_path
+    end
     if params[:apply_type]=='2'
       @checked2='checked'
     else

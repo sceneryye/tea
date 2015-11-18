@@ -11,7 +11,7 @@ gem 'will_paginate', '~> 3.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-gem 'activerecord-mysql2-adapter'
+#gem 'activerecord-mysql2-adapter'
 gem 'mysql2'
 gem 'wicked'
 gem 'hashie'
