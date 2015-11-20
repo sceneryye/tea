@@ -1,3 +1,4 @@
+#encoding:utf-8
 class Admin::DiscountCodesController < Admin::BaseController
   before_filter :require_permission!
 
@@ -11,6 +12,25 @@ class Admin::DiscountCodesController < Admin::BaseController
       format.html # index.html.erb
       format.json { render json: @logs }
     end
+  end
+
+  def new
+    if params[:discount_card]
+      (1..1000).each do |i|
+        @discount_code=Ecstore::DiscountCode.new do |code|
+          code.code = '20151120' +random_string(3).to_s + '0000'[0, 4-i.to_s.length] + i.to_s
+          code.password = random_string(6).to_s
+          code.value  = 100
+          code.type = '金华'
+        end
+         @discount_code.save!
+      end
+    end
+    redirect_to admin_discount_codes_url
+
+  end
+
+  def create
   end
 
   def edit
@@ -31,6 +51,16 @@ class Admin::DiscountCodesController < Admin::BaseController
       end
     end
   end
+
+  private
+
+    def random_string(len)
+      #chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+      chars = ("0".."9").to_a
+      str = ""
+      1.upto(len) { |i| str << chars[rand(chars.size-1)] }
+      return str
+    end
 
 
 end

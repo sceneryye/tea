@@ -30,7 +30,7 @@ class Store::PaymentsController < ApplicationController
 			payment.pay_ver = '1.0'
 			payment.paycost = 0
 
-			payment.account = '佐康自然生态食品'
+			payment.account = '佐康原生态食品'
 			payment.member_id = payment.op_id = @user.member_id
 			payment.pay_account = @user.login_name
 			payment.ip = request.remote_ip
@@ -75,7 +75,7 @@ class Store::PaymentsController < ApplicationController
 			payment.pay_ver = '1.0'
 			payment.paycost = 0
 
-			payment.account = '佐康自然生态食品'
+			payment.account = '佐康原生态食品'
 			payment.member_id = payment.op_id = @user.member_id
 			payment.pay_account = @user.login_name
 			payment.ip = request.remote_ip
@@ -116,7 +116,7 @@ class Store::PaymentsController < ApplicationController
 				pay.pay_id = @payment.payment_id
 				pay.pay_amount = @payment.cur_money.to_f
 				pay.pay_time = Time.now
-				pay.subject = "佐康自然生态食品订单(#{order_id})"
+				pay.subject = "佐康原生态食品订单(#{order_id})"
 				pay.installment = @payment.pay_bill.order.installment if @payment.pay_bill.order
 		        pay.openid = @user.account.login_name
 		        pay.spbill_create_ip = request.remote_ip
