@@ -516,8 +516,9 @@ end
         get 'inventorys'
         get 'inventorylog'
         post 'export_inventory'
-
+        post 'coupon_check'
       end
+
     end
 
     resources :member_addrs do

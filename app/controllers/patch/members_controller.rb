@@ -82,6 +82,26 @@ class Patch::MembersController < ApplicationController
 		add_breadcrumb("我的优惠券")
   end
 
+  #post
+  def coupon_check
+    @discount_code = Ecstore::DiscountCode.where(:status=>'0',
+        :code=>params[:discount_code][:code],
+        :password=>params[:discount_code][:password])
+
+    if @discount_code.size>0
+      @discount_code.first.update_attributes(:member_id=>@user.member_id,:status=>'1')
+      Ecstore::UserCoupon.new do |coupon|
+        coupon.member_id  = @user.member_id
+        coupon.coupon_id  =  @discount_code.first.id
+        coupon.coupon_code =  @discount_code.first.code
+      end.save
+    else
+      @flash_mesage='卡券号或密码不正确'
+    end
+    redirect_to coupons_member_url
+  #  render coupons
+  end
+
 
   def goods
     @orders = @user.orders.joins(:order_items).where('sdb_b2c_order_items.storaged is null').paginate(:page=>params[:page],:per_page=>10)

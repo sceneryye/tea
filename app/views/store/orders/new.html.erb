@@ -117,13 +117,13 @@
 		</table>
 	</div>
 
-	<%if @pmtable%>
+	<%#if @pmtable%>
 	<div class="section promotions">
-		<h5>优惠: </h5>
-		<%=render "promotions"%>
+		<h5>使用卡券: </h5>
+		<%#=render "promotions"%>
 		<%=render "coupons"%>
 	</div>
-	<%end%>
+	<%#end%>
         <!-- <div class="section promotions">
           <h5>特惠码: </h5>
           <%=f.text_field :discount_code,:value=>@user.discount_code%>

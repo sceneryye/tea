@@ -160,6 +160,7 @@ module ModecPay
              },
              function(res){
                 var error_message="";
+                alert(res)
                 if(res.err_msg != "get_brand_wcpay_request:ok") { 
                   error_message = "?error_message="+res.err_desc;                  
                 } 
