@@ -4,6 +4,7 @@
             <div class="row">                    
                 <div class="col-sm-12 col-md-6">    
                 	<p><%=@flash_message%></p>
+                    <h5>您当前的预存款余额为 : <span style="color:green;font-size:20px">&yen;<%=@user.advance%></span></h5>               
                     <%=form_for :discount_code,:url =>coupon_check_member_path, :method=>@method,:html=>{ :role=>"form",:id=>"register_form",data: {type: "script"}} do |f|%>                  
   
                        <div class="row">
@@ -24,15 +25,11 @@
                             </div>
                         </div>     
                          <div class="row">
-                            <div class="col-sm-6">                                    
-                                <div class="form-group">
-                                     <%=f.submit "添加卡券",:class=>"btn btn-success btn-lg"%>            
-                                </div>
+                            <div class="col-sm-6 col-xs-6"> 
+                                     <%=f.submit "添加卡券",:class=>"btn btn-success btn-lg"%>
                             </div>
-                             <div class="col-sm-6">                                    
-                                <div class="form-group">
-                                     <%=link_to "提货专区","/coupon_goods?coupon_id=#{@coupon_id}",:class=>"btn btn-success btn-lg",:style=>"color:white"%>            
-                                </div>
+                             <div class="col-sm-6 col-xs-6 right"> 
+                                     <%=link_to "提货专区","/coupon_goods?coupon_id=#{@coupon_id}",:class=>"btn btn-success btn-lg",:style=>"color:white"%>   
                             </div>
                         </div>
                     <%end%>              

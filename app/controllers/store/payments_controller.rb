@@ -152,17 +152,20 @@ class Store::PaymentsController < ApplicationController
 	end
 
 	def callback
+		@payment = Ecstore::Payment.find(params.delete(:id))
+		order_id = @payment.pay_bill.order
 		if params[:error_message]
-			return render :text=>"支付不成功。error_message:#{params[:error_message]}"
+			return redirect_to order_path(order_id)
+			#return render :text=>"支付不成功。error_message:#{params[:error_message]}"
 		end
 
 		ModecPay.logger.info "[#{Time.now}][#{request.remote_ip}] #{request.request_method} \"#{request.fullpath}\""
 
-		@payment = Ecstore::Payment.find(params.delete(:id))
+		
 		#@payment = Ecstore::Payment.find(params[:payment_id])	
 
 		
-		return redirect_to detail_order_path(@payment.pay_bill.order) if @payment&&@payment.paid?
+		return redirect_to detail_order_path(order_id) if @payment&&@payment.paid?
 		
 		adapter  = params.delete(:adapter)
 		params.delete :controller

@@ -4,22 +4,23 @@ class Store::OrdersController < ApplicationController
   layout 'order'
 
   def create
-
     addr = Ecstore::MemberAddr.find_by_addr_id(params[:member_addr])
     if addr
       ["name","area","addr","zip","tel","mobile"].each do |key,val|
           params[:order].merge!("ship_#{key}"=>addr.attributes[key])
       end
-    end
-   
+     end
+
     return_url=params[:return_url]
     platform=params["platform"];
 
-   
     params[:order].merge!(:ip=>request.remote_ip)
     params[:order].merge!(:member_id=>@user.member_id)
 
-    #从代金券入口进入，商品原价购买
+    @order = Ecstore::Order.new params[:order]   
+
+
+    #
     discount = 1
     if params[:coupon].nil?
       discount =  @order.user.member_lv.dis_count 
@@ -235,11 +236,17 @@ class Store::OrdersController < ApplicationController
   end
 
   def index
+    supplier_id = params[:supplier_id]
     if  @user
+      supplier_id = @user.account.supplier_id
+      if supplier_id == nil
+        supplier_id=78
+      end
+      @supplier = Ecstore::Supplier.find(supplier_id)
       @orders =  @user.orders.order("createtime desc")
     else
-      return_url={:return_url => "/goods"}.to_query
-      redirect_to "/auto_login?#{return_url}&id=1"
+      return_url={:return_url => "/goods?platform=#{params["platform"]}&supplier_id=#{supplier_id}"}.to_query
+      redirect_to "/auto_login?#{return_url}&id=#{supplier_id}"
     end
   end
 
