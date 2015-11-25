@@ -18,17 +18,19 @@ class Ecstore::UserCoupon < Ecstore::Base
 
 
 	def valid_code?
+		
 		Ecstore::NewCoupon.check_code(self.coupon_code)
 	end
 
 	def can_use?
 		return false  unless self.new_coupon
+
 		if self.new_coupon.coupon_type == "A"
 			return valid_code?
 		end
 
 		if self.new_coupon.coupon_type == "B"
-			return valid_code? && used_times.to_i == 0 && used_at.blank?
+			return used_times.to_i == 0 && used_at.blank? && valid_code?
 		end
 		false
 	end

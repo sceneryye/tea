@@ -24,9 +24,14 @@
                             </div>
                         </div>     
                          <div class="row">
-                            <div class="col-sm-12">                                    
+                            <div class="col-sm-6">                                    
                                 <div class="form-group">
                                      <%=f.submit "添加卡券",:class=>"btn btn-success btn-lg"%>            
+                                </div>
+                            </div>
+                             <div class="col-sm-6">                                    
+                                <div class="form-group">
+                                     <%=link_to "提货专区","/coupon_goods?coupon_id=#{@coupon_id}",:class=>"btn btn-success btn-lg",:style=>"color:white"%>            
                                 </div>
                             </div>
                         </div>

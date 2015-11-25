@@ -7,8 +7,16 @@ class Store::GoodsController < ApplicationController
   skip_before_filter :find_path_seo, :find_cart!, :only=>[:newest]
   before_filter :find_tags, :only=>[:cheuksgroup,:newest]
   
+  def coupon_goods
+    @coupon_id  = params[:coupon_id]
+    @coupon = Ecstore::NewCoupon.find_by_id(@coupon_id)
+    bn =  @coupon.condition_val.to_s.gsub('[','(').gsub(']',')')
+    @goods = Ecstore::Good.where("bn in #{bn}").paginate(:page=>params[:page], :per_page=>18)
+    render :layout=>'coupons'
+  end
 
   def show
+    @coupon_id = params[:coupon_id]
     @wechat_user=params[:wechatuser]
 
     @good = Ecstore::Good.includes(:specs,:spec_values,:cat).where(:bn=>params[:id]).first
@@ -31,6 +39,10 @@ class Store::GoodsController < ApplicationController
         count = @recommend_goods.size
         @recommend_goods += @cat.parent_cat.parent_cat.all_goods.select{|good| good.goods_id != @good.goods_id }[0,4-count]
       end
+    end
+    if @coupon_id
+       @current_lv_1='plan-price'
+      return  render :layout=>'coupons'
     end
     if @user
       case @user.member_lv_id
@@ -86,7 +98,6 @@ class Store::GoodsController < ApplicationController
   def newest
       @tag = @tags.first
       if @tag
-          order = params[:order]
           order = params[:order]
           order_string = "goods_id desc"
           if order.present?

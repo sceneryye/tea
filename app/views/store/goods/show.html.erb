@@ -13,7 +13,8 @@
                     </div>
                     <%=form_for :product,:url=>add_cart_index_path do |f|%>
 				    <%=f.hidden_field :goods_id,:value=>@good.goods_id%>
-				    <%=f.hidden_field :type_id,:value=>@good.type_id%>                    
+				    <%=f.hidden_field :type_id,:value=>@good.type_id%>   
+                    <%=f.hidden_field :coupon_id,:value=>@coupon_id%>                
                     <div class="col-sm-4">
                         <ul class="plan featured">
                             <li class="plan-price1 <%=@current_lv_3%>"> 钻石卡会员价：￥<span id="product_price"><%=(@good.price*0.75).round if (@good.price).round%></span></li>

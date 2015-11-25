@@ -70,6 +70,10 @@ class Patch::MembersController < ApplicationController
 	def orders
 		@orders = @user.orders.paginate(:page=>params[:page],:per_page=>10)
 		add_breadcrumb("我的订单")
+     @coupon_id = params[:coupon_id]
+    if @coupon_id
+      render :layout=>'coupons'
+    end
 	end
 
   def shares
@@ -78,8 +82,14 @@ class Patch::MembersController < ApplicationController
   end
 
 	def coupons
-		@user_coupons = @user.user_coupons.paginate(:page=>params[:page],:per_page=>10)
-		add_breadcrumb("我的优惠券")
+    @coupon_id = params[:coupon_id]
+    if @coupon_id
+  		@user_coupons = @user.user_coupons.where(:coupon_id=>@coupon_id).paginate(:page=>params[:page],:per_page=>10)
+    else
+      return render :text=>'卡券类型不正确'
+    end
+		add_breadcrumb("我的卡券")
+    render :layout=>'coupons'
   end
 
   #post
@@ -92,13 +102,15 @@ class Patch::MembersController < ApplicationController
       @discount_code.first.update_attributes(:member_id=>@user.member_id,:status=>'1')
       Ecstore::UserCoupon.new do |coupon|
         coupon.member_id  = @user.member_id
-        coupon.coupon_id  =  @discount_code.first.id
+        coupon.coupon_id  =  @discount_code.first.coupon_id
         coupon.coupon_code =  @discount_code.first.code
       end.save
+      Ecstore::Member.find_by_member_id(@user.member_id).update_attributes(:advance=>@user.advance+100,:member_lv_id=>'1')
+      redirect_to "/member/coupons?coupon_id=#{@discount_code.first.coupon_id}"#coupons_member_url(:coupon_id=>params[:coupon_id])
     else
       @flash_mesage='卡券号或密码不正确'
     end
-    redirect_to coupons_member_url
+   
   #  render coupons
   end
 

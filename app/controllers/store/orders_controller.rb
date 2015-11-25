@@ -4,37 +4,26 @@ class Store::OrdersController < ApplicationController
   layout 'order'
 
   def create
+
     addr = Ecstore::MemberAddr.find_by_addr_id(params[:member_addr])
-    ["name","area","addr","zip","tel","mobile"].each do |key,val|
-        params[:order].merge!("ship_#{key}"=>addr.attributes[key])
+    if addr
+      ["name","area","addr","zip","tel","mobile"].each do |key,val|
+          params[:order].merge!("ship_#{key}"=>addr.attributes[key])
+      end
     end
    
     return_url=params[:return_url]
     platform=params["platform"];
 
-    supplier_id = 1
-
-
+   
     params[:order].merge!(:ip=>request.remote_ip)
     params[:order].merge!(:member_id=>@user.member_id)
-    params[:order].merge!(:supplier_id=>supplier_id)
 
-    #=====推广佣金计算=======
-    recommend_user = session[:recommend_user]
-    if recommend_user==nil
-      recommend_user= @user.login_name
+    #从代金券入口进入，商品原价购买
+    discount = 1
+    if params[:coupon].nil?
+      discount =  @order.user.member_lv.dis_count 
     end
-    params[:order].merge!(:recommend_user=>recommend_user)
-    #return render :text=>params[:order]
-    #====================
-    @order = Ecstore::Order.new params[:order]
-    if recommend_user == nil
-      @order.commission=0
-    end
-    #debug_line_item =''
-
-
-    discount =  @order.user.member_lv.dis_count 
 
     @line_items.each do |line_item|
       product = line_item.product
@@ -92,7 +81,7 @@ class Store::OrdersController < ApplicationController
     end
 
 
-    if @pmtable
+    # if @pmtable
       # ==== coupons======
       codes = params[:coupon].present? ? params[:coupon][:codes] : []
       coupons =  codes.collect do |code|
@@ -131,7 +120,7 @@ class Store::OrdersController < ApplicationController
           order_pmt.pmt_desc = promotion.desc
         end
       end
-    end
+    # end
 
     if @order.save
       @line_items.delete_all
@@ -246,17 +235,11 @@ class Store::OrdersController < ApplicationController
   end
 
   def index
-    supplier_id = params[:supplier_id]
     if  @user
-      supplier_id = @user.account.supplier_id
-      if supplier_id == nil
-        supplier_id=78
-      end
-      @supplier = Ecstore::Supplier.find(supplier_id)
       @orders =  @user.orders.order("createtime desc")
     else
-      return_url={:return_url => "/goods?platform=#{params["platform"]}&supplier_id=#{supplier_id}"}.to_query
-      redirect_to "/auto_login?#{return_url}&id=#{supplier_id}"
+      return_url={:return_url => "/goods"}.to_query
+      redirect_to "/auto_login?#{return_url}&id=1"
     end
   end
 
@@ -274,10 +257,20 @@ class Store::OrdersController < ApplicationController
     
     @def_addr = @addrs.where(:def_addr=>1).first || @addrs.first
 
-    if @pmtable
+    # if @pmtable
       @order_promotions = Ecstore::Promotion.matched_promotions(@line_items)
       @goods_promotions = Ecstore::Promotion.matched_goods_promotions(@line_items)
       @coupons = @user.usable_coupons
+    # end
+
+    @coupon_id = params[:coupon_id]
+
+    @discount = 1
+
+    if @coupon_id.nil? ||@coupon_id.empty?
+        @discount = @user.member_lv.dis_count
+    else
+      render :layout=>'coupons'
     end
 
   end
@@ -330,9 +323,9 @@ class Store::OrdersController < ApplicationController
     end
 
    sql = "SELECT SUM(price*quantity) AS total,mdk.sdb_b2c_cart_objects.supplier_id,SUM(freight)/count(*) AS freight FROM mdk.sdb_b2c_cart_objects
-INNER JOIN mdk.sdb_b2c_goods ON SUBSTRING_INDEX(SUBSTRING_INDEX(mdk.sdb_b2c_cart_objects.obj_ident,'_',2),'_',-1) = mdk.sdb_b2c_goods.goods_id
-WHERE mdk.sdb_b2c_cart_objects.member_id=#{@user.member_id}
-GROUP BY mdk.sdb_b2c_cart_objects.supplier_id"
+    INNER JOIN mdk.sdb_b2c_goods ON SUBSTRING_INDEX(SUBSTRING_INDEX(mdk.sdb_b2c_cart_objects.obj_ident,'_',2),'_',-1) = mdk.sdb_b2c_goods.goods_id
+    WHERE mdk.sdb_b2c_cart_objects.member_id=#{@user.member_id}
+    GROUP BY mdk.sdb_b2c_cart_objects.supplier_id"
     @cart_total_by_supplier = ActiveRecord::Base.connection.execute(sql)
     @cart_freight = 0
     @favorable_terms = 0

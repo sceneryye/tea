@@ -4,25 +4,43 @@ class Store::CartController < ApplicationController
 
 
   def index
-		render :layout=>"cart"
+  		@coupon_id = params[:coupon_id]
+
+  		@discount = 1
+
+  		if @coupon_id.nil? ||@coupon_id.empty?
+  			@discount = @user.member_lv.dis_count
+  			@shoping_url = '/#pricing'
+			render :layout=>"cart"
+		else
+			@shoping_url ="/coupon_goods?coupon_id=#{ @coupon_id}"
+			render :layout=>'coupons'
+		end
   end
 
 	
 	def add
      
-    if @user.nil?
-       return redirect_to  "/login"
-    end
+	    if signed_in?
+			member_id = @user.member_id
+			member_ident = Digest::MD5.hexdigest(@user.member_id.to_s)
+		else
+			member_id = -1
+			member_ident = @m_id
+		end
+
 		# parse params
 		specs = params[:product].delete(:specs)
 		customs = params[:product].delete(:customs)
 		quantity = params[:product].delete(:quantity).to_i
 		goods_id = params[:product][:goods_id]
-    if quantity.blank? || quantity ==0
-       quantity=1
-    end
+		@coupon_id = params[:product][:coupon_id]
+
+	    if quantity.blank? || quantity ==0
+	       quantity=1
+	    end
     
-#return render :text=> "specs:#{specs[0].length},customs:#{customs},quantity:#{quantity},goods_id:#{goods_id}"
+		#return render :text=> "specs:#{specs[0].length},customs:#{customs},quantity:#{quantity},goods_id:#{goods_id}"
 		# product_id = specs.collect do |spec_value_id|
 		# 	Ecstore::GoodSpec.where(params[:product].merge(:spec_value_id=>spec_value_id)).pluck(:product_id)
 		# end.inject(:&).first
@@ -31,21 +49,19 @@ class Store::CartController < ApplicationController
 		# @product  =  @good.products.select do |p|
 		# 	p.spec_desc["spec_value_id"].values.map{ |x| x.to_s }.sort == specs.sort
 		# end.first
-    if specs[0].empty?
-      @product = @good.products.first
-    else
-      @product  =  @good.products.select do |p|
-        p.good_specs.pluck(:spec_value_id).map{ |x| x.to_s }.sort == specs.sort
-      end.first
+	    if specs[0].empty?
+	      @product = @good.products.first
+	    else
+	      @product  =  @good.products.select do |p|
+	        p.good_specs.pluck(:spec_value_id).map{ |x| x.to_s }.sort == specs.sort
+	      end.first
 
-    end
-#return render :text=>@products.product_id
-		if signed_in?
-			member_id = @user.member_id
-			member_ident = Digest::MD5.hexdigest(@user.member_id.to_s)
-		else
-			member_id = -1
-			member_ident = @m_id
+	    end		
+		
+		#清除从其他渠道进来存入购物车的商品
+		if @coupon_id 
+			other_cart = Ecstore::Cart.where("member_id=#{member_id} and coupon_id is null")
+			other_cart.delete_all
 		end
 
 		@cart = Ecstore::Cart.where(:obj_ident=>"goods_#{goods_id}_#{@product.product_id}",
@@ -54,7 +70,8 @@ class Store::CartController < ApplicationController
 			cart.quantity = quantity
 			cart.time = Time.now.to_i
 			cart.member_id = member_id
-      cart.supplier_id=@good.supplier_id
+			cart.coupon_id = @coupon_id
+      		cart.supplier_id=@good.supplier_id
 		end
 
 		if @cart.new_record?
@@ -79,7 +96,7 @@ class Store::CartController < ApplicationController
 		#calculate cart_total and cart_total_quantity
 		find_cart!
     
-    redirect_to "/cart"
+    redirect_to "/cart?coupon_id=#{@coupon_id}"
    
    
 	#rescue

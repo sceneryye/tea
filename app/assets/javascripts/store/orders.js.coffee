@@ -25,7 +25,8 @@ $ ->
     part_amount = 0.0
     part_amount =  parseFloat $("#advance").data("amount") if $("#advance").attr("checked") == "checked"
 
-    pay_amount = coupon_amount + pmt_amount - order_amount  
+    pay_amount = coupon_amount + pmt_amount - order_amount
+    
     $("#final_amount").text(pay_amount)
 
     bcom_discount = 1.0
@@ -34,7 +35,7 @@ $ ->
       bcom_discount_amount = pay_amount -pay_amount*bcom_discount
       $("#bcom_discount").text(-bcom_discount_amount)
 
-    pay_amount =part_amount -  pay_amount * bcom_discount 
+    pay_amount = part_amount -  pay_amount * bcom_discount 
     $("#pay_amount").text(pay_amount)
 
   window.compute_payment2 = ->
@@ -158,7 +159,7 @@ $ ->
     code = $("#coupon_code").val()
     if code.length == 0
       $("#matched_coupon").empty()
-      alert "请输入优惠券"
+      alert "请输入优惠卡券"
       $("#coupon_code").focus()
     else
       codes = []

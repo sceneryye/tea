@@ -31,7 +31,7 @@ class Ecstore::NewCoupon < Ecstore::Base
 
 
 	def enable?
-	      return false  unless  self.enable
+	   return false  unless  self.enable
 	  	now =  Time.now
 	       if self.begin_at.blank? && self.end_at.blank?
 	          return true
@@ -74,6 +74,13 @@ class Ecstore::NewCoupon < Ecstore::Base
 
 	def self.check_code(code)
 		return false  if code.blank?
+
+		#代金券
+			discount_code = Ecstore::DiscountCode.find_by_code(code)
+			return !discount_code.nil?
+		#——————————————————————————————————
+
+
 		_type = code[0].upcase
 
 		if _type == "A"
@@ -82,6 +89,7 @@ class Ecstore::NewCoupon < Ecstore::Base
 		end
 
 		if _type == "B"
+
 			return false if code.size < 11
 
 			_prefix = code[0..-11]
@@ -101,6 +109,16 @@ class Ecstore::NewCoupon < Ecstore::Base
 	def self.check_and_find_by_code(code)
 
 		return nil  unless self.check_code(code)
+
+		#佐康代金券
+		discount_code = Ecstore::DiscountCode.find_by_code(code)
+		_coupon =  self.find(1)
+		_coupon.current_code = code
+		return _coupon
+		#----------
+
+		
+
 		_type = code[0].upcase
 		if _type == "A"
 			_coupon =  self.find_by_coupon_prefix(code)
