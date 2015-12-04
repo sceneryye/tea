@@ -18,10 +18,11 @@ class Admin::DiscountCodesController < Admin::BaseController
     if params[:discount_card]
       (1..1000).each do |i|
         @discount_code=Ecstore::DiscountCode.new do |code|
-          code.code = '20151120' +random_string(3).to_s + '0000'[0, 4-i.to_s.length] + i.to_s
+          code.code = '2015113010' +random_string(2).to_s + '0000'[0, 4-i.to_s.length] + i.to_s
           code.password = random_string(6).to_s
-          code.value  = 100
-          code.type = '金华'
+          code.value  = 1000
+          code.card_name = '心意卡'
+          code.coupon_id = 2
         end
          @discount_code.save!
       end
