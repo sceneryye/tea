@@ -1,6 +1,6 @@
 source 'https://ruby.taobao.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.18'
 
 # ARTICLES CONTROLLER
 gem "friendly_id", "~> 4.0.9"
